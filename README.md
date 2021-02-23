@@ -14,6 +14,10 @@ The most important part of GPP for me is "Local Users and Groups", that's why I 
 This module is a very much work in progress — expect breaking changes ahead.
 Your help is welcome and appreciated.
 
+## Installation
+
+`Install-Module PSGPPreferences`
+
 ## What does already work
 
 * The "Local Users and Groups" section, partially - Groups only:

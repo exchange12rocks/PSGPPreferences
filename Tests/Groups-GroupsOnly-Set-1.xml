@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Groups clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}">
+	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="EXAMPLE\TestGroup1" image="2" changed="2021-02-23 20:30:07" uid="{798C5D07-11C3-45C0-B767-124DF9A369A6}">
+		<Properties action="U" newName="" description="" deleteAllUsers="0" deleteAllGroups="0" removeAccounts="0" groupSid="" groupName="EXAMPLE\TestGroup1"/>
+	</Group>
+	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="Administrators (built-in)" image="2" changed="2021-02-23 20:24:32" uid="{6F82151C-1B8A-4809-ABDD-1EA08F91C923}">
+		<Properties action="U" newName="" description="" deleteAllUsers="0" deleteAllGroups="0" removeAccounts="0" groupSid="S-1-5-32-544" groupName="Administrators (built-in)"/>
+	</Group>
+	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="EXAMPLE\TestGroup3" image="3" changed="2021-02-23 20:20:51" uid="{5BFED1D1-5C42-4504-84E7-E62FA36A6E69}">
+		<Properties action="D" removeAccounts="0" groupName="EXAMPLE\TestGroup3"/>
+	</Group>
+	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="EXAMPLE\TestGroup4" image="0" changed="2021-02-23 20:21:13" uid="{ED220833-3027-4071-80BE-0D0B50B781B3}">
+		<Properties action="C" description="" deleteAllUsers="0" deleteAllGroups="0" removeAccounts="0" groupName="EXAMPLE\TestGroup4"/>
+	</Group>
+	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="EXAMPLE\TestGroup5" image="1" changed="2021-02-23 20:21:33" uid="{4046D23B-4875-4E82-96B3-9920E9A9BDFF}">
+		<Properties action="R" description="" deleteAllUsers="0" deleteAllGroups="0" removeAccounts="0" groupName="EXAMPLE\TestGroup5"/>
+	</Group>
+	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="LocalGroup1" image="2" changed="2021-02-23 20:30:07" uid="{483E7907-F4DF-439C-946D-91D2FE3AFC20}">
+		<Properties action="U" newName="LocalGroup2" description="My Awesome Description" deleteAllUsers="0" deleteAllGroups="0" removeAccounts="0" groupSid="" groupName="LocalGroup1"/>
+	</Group>
+	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="LocalGroup3" image="0" changed="2021-02-23 20:23:51" uid="{52D0DA5A-91FD-472B-83C4-E70EC7CD5ACB}">
+		<Properties action="C" description="" deleteAllUsers="0" deleteAllGroups="0" removeAccounts="0" groupName="LocalGroup3">
+			<Members>
+				<Member name="EXAMPLE\Administrator" action="ADD" sid=""/>
+				<Member name="EXAMPLE\TEST1" action="ADD" sid="S-1-5-21-2571216883-1601522099-2002488368-1620"/>
+				<Member name="EXAMPLE\TEST2" action="REMOVE" sid=""/>
+				<Member name="EXAMPLE\TEST3" action="REMOVE" sid="S-1-5-21-2571216883-1601522099-2002488368-1622"/>
+			</Members>
+		</Properties>
+	</Group>
+	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="Backup Operators (built-in)" image="2" changed="2021-02-23 20:28:18" uid="{880FFE86-78C7-4E85-AFDE-608C24977161}" userContext="0" removePolicy="0">
+		<Properties action="U" newName="" description="" deleteAllUsers="1" deleteAllGroups="1" removeAccounts="0" groupSid="S-1-5-32-551" groupName="Backup Operators (built-in)">
+			<Members>
+				<Member name="EXAMPLE\Administrator" action="ADD" sid=""/>
+				<Member name="EXAMPLE\TEST1" action="ADD" sid="S-1-5-21-2571216883-1601522099-2002488368-1620"/>
+				<Member name="EXAMPLE\TEST2" action="REMOVE" sid=""/>
+				<Member name="EXAMPLE\TEST3" action="REMOVE" sid="S-1-5-21-2571216883-1601522099-2002488368-1622"/>
+			</Members>
+		</Properties>
+	</Group>
+</Groups>
