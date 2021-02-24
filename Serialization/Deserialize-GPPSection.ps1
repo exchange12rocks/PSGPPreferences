@@ -19,11 +19,16 @@ function Deserialize-GPPSection {
                         if ($GPPItemGroupMembersElement) {
                             $Members = [System.Collections.Generic.List[GPPItemGroupMember]]::new()
                             foreach ($Item in $GPPItemGroupMembersElement) {
-                                $Members.Add([GPPItemGroupMember]::new($Item.action, $Item.name, $Item.sid))
+                                if ($Item.sid) {
+                                    $Members.Add([GPPItemGroupMember]::new($Item.action, $Item.name, $Item.sid))
+                                }
+                                else {
+                                    $Members.Add([GPPItemGroupMember]::new($Item.action, $Item.name))
+                                }
                             }
                         }
 
-                        $GPPItemPropertiesGroupElementPropertyDefinitions = (Get-Member -InputObject $GPPItemPropertiesGroupElement | Where-Object {$_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property}).Name
+                        $GPPItemPropertiesGroupElementPropertyDefinitions = (Get-Member -InputObject $GPPItemPropertiesGroupElement | Where-Object { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Name
                         foreach ($PropertyDefinition in $GPPItemPropertiesGroupElementPropertyDefinitions) {
                             if ($GPPItemPropertiesGroupElement.$PropertyDefinition -eq '') {
                                 $GPPItemPropertiesGroupElement.RemoveAttribute($PropertyDefinition)
@@ -31,7 +36,13 @@ function Deserialize-GPPSection {
                         }
 
                         $GPPItemPropertiesGroup = [GPPItemPropertiesGroup]::new($GPPItemPropertiesGroupElement.action, $GPPItemPropertiesGroupElement.groupName, $GPPItemPropertiesGroupElement.groupSid, $GPPItemPropertiesGroupElement.newName, $GPPItemPropertiesGroupElement.description, $Members)
-                        $GroupsMembers.Add([GPPItemGroup]::new($GPPItemPropertiesGroup, [guid]$ChildNode.uid))
+                        $Disabled = if ($ChildNode.disabled -eq 1) {
+                            $true
+                        }
+                        else {
+                            $false
+                        }
+                        $GroupsMembers.Add([GPPItemGroup]::new($GPPItemPropertiesGroup, [guid]$ChildNode.uid, $Disabled))
                     }
                     'User' {
                         # TODO
@@ -44,13 +55,13 @@ function Deserialize-GPPSection {
             # String
             # And $true / $false does not play well with string content.
             # But implicit type convertion works well with string -> int 
-            $Disabled = if ($RootElement.disabled -eq 1) {
+            $SectionDisabled = if ($RootElement.disabled -eq 1) {
                 $true
             }
             else {
                 $false
             }
-            [GPPSectionGroups]::new($GroupsMembers, $Disabled)
+            [GPPSectionGroups]::new($GroupsMembers, $SectionDisabled)
         }
         'Files' {
             # TODO
