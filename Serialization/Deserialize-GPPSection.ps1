@@ -35,7 +35,19 @@ function Deserialize-GPPSection {
                             }
                         }
 
-                        $GPPItemPropertiesGroup = [GPPItemPropertiesGroup]::new($GPPItemPropertiesGroupElement.action, $GPPItemPropertiesGroupElement.groupName, $GPPItemPropertiesGroupElement.groupSid, $GPPItemPropertiesGroupElement.newName, $GPPItemPropertiesGroupElement.description, $Members)
+                        $DeleteAllUsers = if ($GPPItemPropertiesGroupElement.deleteAllUsers -eq 1) {
+                            $true
+                        }
+                        else {
+                            $false
+                        }
+                        $DeleteAllGroups = if ($GPPItemPropertiesGroupElement.deleteAllGroups -eq 1) {
+                            $true
+                        }
+                        else {
+                            $false
+                        }
+                        $GPPItemPropertiesGroup = [GPPItemPropertiesGroup]::new($GPPItemPropertiesGroupElement.action, $GPPItemPropertiesGroupElement.groupName, $GPPItemPropertiesGroupElement.groupSid, $GPPItemPropertiesGroupElement.newName, $GPPItemPropertiesGroupElement.description, $Members, $DeleteAllUsers, $DeleteAllGroups)
                         $Disabled = if ($ChildNode.disabled -eq 1) {
                             $true
                         }

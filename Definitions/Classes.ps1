@@ -345,18 +345,25 @@ class GPPItemPropertiesGroup : GPPItemProperties {
     [string]$groupName
     [System.Collections.Generic.List[GPPItemGroupMember]]$Members
 
+    GPPItemPropertiesGroup ([GPPItemAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID) {
+        $this.action = $Action
+        $this.groupName = $Name
+        $this.groupSid = $SID
+    }
+
+    GPPItemPropertiesGroup ([GPPItemAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID, [GPPItemGroupMember[]]$Members) {
+        $this.action = $Action
+        $this.groupName = $Name
+        $this.groupSid = $SID
+        $this.Members = $Members
+    }
+
     GPPItemPropertiesGroup ([GPPItemAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID, [string] $NewName, [string] $Description) {
         $this.action = $Action
         $this.groupName = $Name
         $this.groupSid = $SID
         $this.newName = $NewName
         $this.description = $Description
-    }
-
-    GPPItemPropertiesGroup ([GPPItemAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID) {
-        $this.action = $Action
-        $this.groupName = $Name
-        $this.groupSid = $SID
     }
 
     GPPItemPropertiesGroup ([GPPItemAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID, [string] $NewName, [string] $Description, [GPPItemGroupMember[]] $Members) {
@@ -368,11 +375,15 @@ class GPPItemPropertiesGroup : GPPItemProperties {
         $this.Members = $Members
     }
 
-    GPPItemPropertiesGroup ([GPPItemAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID, [GPPItemGroupMember[]]$Members) {
+    GPPItemPropertiesGroup ([GPPItemAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID, [string] $NewName, [string] $Description, [GPPItemGroupMember[]] $Members, [bool] $DeleteAllUsers, [bool] $DeleteAllGroups) {
         $this.action = $Action
         $this.groupName = $Name
         $this.groupSid = $SID
+        $this.newName = $NewName
+        $this.description = $Description
         $this.Members = $Members
+        $this.deleteAllUsers = $DeleteAllUsers
+        $this.deleteAllGroups = $DeleteAllGroups
     }
 
     [void]RemoveMember([GPPItemGroupMember] $Member) {
@@ -383,10 +394,6 @@ class GPPItemPropertiesGroup : GPPItemProperties {
             }
         }
         $this.Members = $NewMembers
-    }
-
-    [void]RemoveMember2([GPPItemGroupMember] $Member) {
-        $this.Members = $this.Members | Where-Object -FilterScript {$_ -ne $Member}
     }
 }
 
