@@ -1,7 +1,7 @@
 BeforeDiscovery {
     $ScriptDirectoryPath = $PSScriptRoot
     $ModuleRootPath = Join-Path -Path $ScriptDirectoryPath -ChildPath ..\
-    Import-Module -Name (Join-Path -Path $ModuleRootPath -ChildPath 'PSGPPreferences.psd1')-Force
+    Import-Module -Name (Join-Path -Path $ModuleRootPath -ChildPath 'PSGPPreferences.psd1') -Force
     . (Join-Path -Path $ModuleRootPath -ChildPath 'Definitions\Classes.ps1')
 }
 
@@ -76,7 +76,7 @@ Describe 'Internal functions' {
                         $GPPSection | Should -BeOfType [GPPSectionGroups]
                     }
                     It "GPP section is enabled" {
-                        $GPPSection.disable | Should -BeFalse
+                        $GPPSection.disabled | Should -BeFalse
                     }
                     It "GPP section has a correct number of members" {
                         $GPPSection.Members | Should -HaveCount 8
@@ -709,7 +709,7 @@ Describe 'Internal functions' {
                         $GPPSection | Should -BeOfType [GPPSectionGroups]
                     }
                     It "GPP section is disabled" {
-                        $GPPSection.disable | Should -BeTrue
+                        $GPPSection.disabled | Should -BeTrue
                     }
                     It "GPP section has a correct number of members" {
                         $GPPSection.Members | Should -HaveCount 8
