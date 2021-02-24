@@ -328,6 +328,11 @@ class GPPItemGroupMember : PSGPPreferencesItem {
         $this.name = $Name
         $this.sid = $SID
     }
+
+    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string]$Name) {
+        $this.action = $Action
+        $this.name = $Name
+    }
 }
 
 class GPPItemPropertiesGroup : GPPItemProperties {

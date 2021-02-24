@@ -37,6 +37,7 @@
 #### LocalGroup3
 
 * Action - Create
+* Disabled - True
 
 ##### Members
 
