@@ -18,7 +18,7 @@
 	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="LocalGroup1" image="2" changed="2021-02-23 20:30:07" uid="{483E7907-F4DF-439C-946D-91D2FE3AFC20}">
 		<Properties action="U" newName="LocalGroup2" description="My Awesome Description" deleteAllUsers="0" deleteAllGroups="0" removeAccounts="0" groupSid="" groupName="LocalGroup1"/>
 	</Group>
-	<Group clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="LocalGroup3" image="0" changed="2021-02-23 20:23:51" uid="{52D0DA5A-91FD-472B-83C4-E70EC7CD5ACB}">
+	<Group disabled="1" clsid="{6D4A79E4-529C-4481-ABD0-F5BD7EA93BA7}" name="LocalGroup3" image="0" changed="2021-02-23 20:23:51" uid="{52D0DA5A-91FD-472B-83C4-E70EC7CD5ACB}">
 		<Properties action="C" description="" deleteAllUsers="0" deleteAllGroups="0" removeAccounts="0" groupName="LocalGroup3">
 			<Members>
 				<Member name="EXAMPLE\Administrator" action="ADD" sid=""/>
