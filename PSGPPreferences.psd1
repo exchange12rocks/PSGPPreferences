@@ -4,7 +4,7 @@
     GUID              = '840171e9-2b12-448d-9fe3-9365af87081e'
     Author            = 'Kirill Nikolaev'
     PowerShellVersion = '5.1'
-    Description       = ''
+    Description       = 'A way to manage Group Policy Preferences through PowerShell'
     RequiredModules   = @(
     )
     FunctionsToExport = @(
