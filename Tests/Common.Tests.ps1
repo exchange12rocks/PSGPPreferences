@@ -8,18 +8,14 @@ BeforeDiscovery {
 Describe 'Internal functions' {
     InModuleScope PSGPPreferences {
         Describe 'UNIT: Initialize-GPPSection' {
-
-            $InitializeGPPSectionOutput = Initialize-GPPSection
-            $TestCases = @(
-                @{
-                    InitializeGPPSectionOutput = $InitializeGPPSectionOutput
-                }
-            )
-            It 'Ensures the result is an XML document' -TestCases $TestCases {
+            BeforeAll {
+                $InitializeGPPSectionOutput = Initialize-GPPSection
+            }
+            It 'Ensures the result is an XML document' {
                 $InitializeGPPSectionOutput -is [System.Xml.XmlDocument] | Should -Be $true
             }
 
-            It 'Ensures the XML document is correct' -TestCases $TestCases {
+            It 'Ensures the XML document is correct' {
                 ($InitializeGPPSectionOutput).outerXml | Should -Be '<?xml version="1.0" encoding="utf-8"?>'
             }
         }
