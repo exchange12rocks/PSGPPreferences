@@ -21,7 +21,7 @@ Describe 'Internal functions' {
         }
 
         Describe 'UNIT: Convert-GPONameToID' {
-            # Impossible to test due to dependency on the System.DirectoryServices.DirectorySearcher class and we can't mock classes yet.
+            # Impossible to test due to the dependency on the System.DirectoryServices.DirectorySearcher class and we can't mock classes yet.
         }
     }
 }
