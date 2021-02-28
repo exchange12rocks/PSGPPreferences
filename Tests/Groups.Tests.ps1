@@ -1,5 +1,10 @@
 BeforeDiscovery {
     $ScriptDirectoryPath = $PSScriptRoot
+    $DataSourcePath = Join-Path -Path $ScriptDirectoryPath -ChildPath 'Data\Groups'
+    $Set1Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupsOnly-Set-1.xml'
+    [xml]$Set1Data = Get-Content -Path $Set1Path
+    $Set2Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupsOnly-Set-2.xml'
+    [xml]$Set2Data = Get-Content -Path $Set2Path
     $ModuleRootPath = Join-Path -Path $ScriptDirectoryPath -ChildPath ..\
     Import-Module -Name (Join-Path -Path $ModuleRootPath -ChildPath 'PSGPPreferences.psd1') -Force
     . (Join-Path -Path $ModuleRootPath -ChildPath 'Definitions\Classes.ps1')
@@ -14,36 +19,25 @@ Describe 'Internal functions' {
                         Domain = 'test.example.com'
                     }
                 }
+
+                $GPOId = [guid]::new('70f86590-588a-4659-8880-3d2374604811')
             }
 
-            BeforeDiscovery {
-                $TestCases = @(
-                    @{
-                        GPOId = [guid]::new('70f86590-588a-4659-8880-3d2374604811')
-                    }
-                )
-            }
-
-            It 'Esures the function forms a correct path with string values as parameters' -TestCases $TestCases {
+            It 'Esures the function forms a correct path with string values as parameters' {
                 Get-GPPSectionFilePath -GPOId $GPOId.Guid -Context 'Machine' -Type 'Groups' |
                 Should -Be '\\test.example.com\SYSVOL\test.example.com\Policies\{70f86590-588a-4659-8880-3d2374604811}\Machine\Preferences\Groups\Groups.xml'
             }
-            <# This does not work yet, don't know why
-            It 'Esures the function forms a correct path with typed values' -TestCases $TestCases {
-                Get-GPPSectionFilePath -GPOId $GPOId -Context [GPPContext]::Machine -Type [GPPType]::Groups |
+
+            It 'Esures the function forms a correct path with typed values' {
+                Get-GPPSectionFilePath -GPOId $GPOId -Context ([GPPContext]::Machine) -Type ([GPPType]::Groups) |
                 Should -Be '\\test.example.com\SYSVOL\test.example.com\Policies\{70f86590-588a-4659-8880-3d2374604811}\Machine\Preferences\Groups\Groups.xml'
-            } #>
+            }
         }
 
         Describe 'UNIT: Deserialize-GPPSection' {
-            BeforeAll {
-                $SourcePath = $PSScriptRoot
-            }
             Context 'Groups-GroupsOnly-Set-1' {
                 BeforeAll {
-                    $FilePath = Join-Path -Path $SourcePath -ChildPath 'Groups-GroupsOnly-Set-1.xml'
-                    [xml]$Data = Get-Content -Path $FilePath
-                    $GPPSection = Deserialize-GPPSection -InputObject $Data
+                    $GPPSection = Deserialize-GPPSection -InputObject $Set1Data
                 }
                 Context 'GPP section properties' {
                     It 'GPP section exists' {
@@ -672,12 +666,9 @@ Describe 'Internal functions' {
             }
             Context 'Groups-GroupsOnly-Set-2' {
                 BeforeAll {
-                    $FilePath = Join-Path -Path $SourcePath -ChildPath 'Groups-GroupsOnly-Set-2.xml'
-                    [xml]$Data = Get-Content -Path $FilePath
-                    $GPPSection = Deserialize-GPPSection -InputObject $Data
+                    $GPPSection = Deserialize-GPPSection -InputObject $Set2Data
                 }
                 Context 'GPP section properties' {
-                     
                     It 'GPP section exists' {
                         $GPPSection | Should -Not -BeNullOrEmpty
                     }
@@ -1307,10 +1298,7 @@ Describe 'Internal functions' {
         Describe 'UNIT: Serialize-GPPItem' {
             Context 'Groups-GroupsOnly-Set-1' {
                 BeforeAll {
-                    $SourcePath = $PSScriptRoot
-                    $FilePath = Join-Path -Path $SourcePath -ChildPath 'Groups-GroupsOnly-Set-1.xml'
-                    [xml]$Data = Get-Content -Path $FilePath
-                    $GPPSection = Deserialize-GPPSection -InputObject $Data
+                    $GPPSection = Deserialize-GPPSection -InputObject $Set1Data
                 }
                 Context 'GPPSectionGroups' {
                     # Serialize-GPPSectionGroups
@@ -2323,10 +2311,7 @@ Describe 'Internal functions' {
 
             Context 'Groups-GroupsOnly-Set-2' {
                 BeforeAll {
-                    $SourcePath = $PSScriptRoot
-                    $FilePath = Join-Path -Path $SourcePath -ChildPath 'Groups-GroupsOnly-Set-2.xml'
-                    [xml]$Data = Get-Content -Path $FilePath
-                    $GPPSection = Deserialize-GPPSection -InputObject $Data
+                    $GPPSection = Deserialize-GPPSection -InputObject $Set2Data
                 }
                 Context 'GPPSectionGroups' {
                     # Serialize-GPPSectionGroups
