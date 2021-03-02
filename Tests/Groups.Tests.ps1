@@ -8,8 +8,6 @@ BeforeDiscovery {
     $ModuleRootPath = Join-Path -Path $ScriptDirectoryPath -ChildPath ..\
     Import-Module -Name (Join-Path -Path $ModuleRootPath -ChildPath 'PSGPPreferences.psd1') -Force
     . (Join-Path -Path $ModuleRootPath -ChildPath 'Definitions\Classes.ps1')
-
-
 }
 
 Describe 'Internal functions' {
@@ -4035,6 +4033,2561 @@ Describe 'Internal functions' {
                             }
                             It 'SID is correct' {
                                 $XMLDocument.Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Describe 'UNIT: Serialize-GPPItemPropertiesGroup' {
+            BeforeAll {
+                Mock Serialize-GPPItemGroupMember {
+                    $Path = switch ($InputObject.name) {
+                        'EXAMPLE\Administrator' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'GPPItemGroupMember_EXAMPLE_Administrator.xml'
+                        }
+                        'EXAMPLE\TEST1' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'GPPItemGroupMember_EXAMPLE_TEST1.xml'
+                        }
+                        'EXAMPLE\TEST2' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'GPPItemGroupMember_EXAMPLE_TEST2.xml'
+                        }
+                        'EXAMPLE\TEST3' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'GPPItemGroupMember_EXAMPLE_TEST3.xml'
+                        }
+                    }
+
+                    [xml]$Content = Get-Content -Path $Path
+                    $Content
+                }
+
+                Mock Serialize-GPPItem {
+                    $Path = switch ($InputObject.groupName) {
+                        'EXAMPLE\TestGroup1' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'Serialize-GPPItemPropertiesGroup_Serialize-GPPItem_EXAMPLE_TestGroup1.xml'
+                        }
+                        'Administrators (built-in)' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'Serialize-GPPItemPropertiesGroup_Serialize-GPPItem_Administrators (built-in).xml'
+                        }
+                        'EXAMPLE\TestGroup3' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'Serialize-GPPItemPropertiesGroup_Serialize-GPPItem_EXAMPLE_TestGroup3.xml'
+                        }
+                        'EXAMPLE\TestGroup4' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'Serialize-GPPItemPropertiesGroup_Serialize-GPPItem_EXAMPLE_TestGroup4.xml'
+                        }
+                        'EXAMPLE\TestGroup5' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'Serialize-GPPItemPropertiesGroup_Serialize-GPPItem_EXAMPLE_TestGroup5.xml'
+                        }
+                        'LocalGroup1' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'Serialize-GPPItemPropertiesGroup_Serialize-GPPItem_LocalGroup1.xml'
+
+                        }
+                        'LocalGroup3' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'Serialize-GPPItemPropertiesGroup_Serialize-GPPItem_LocalGroup3.xml'
+
+                        }
+                        'Backup Operators (built-in)' {
+                            Join-Path -Path $DataSourcePath -ChildPath 'Serialize-GPPItemPropertiesGroup_Serialize-GPPItem_Backup Operators (built-in).xml'
+
+                        }
+                    }
+
+                    [xml]$Content = Get-Content -Path $Path
+                    $Content
+                }
+            }
+            Context 'Groups-GroupsOnly-Set-1' {
+                BeforeAll {
+                    $GPPSection = $GPPSectionSet1
+                }
+
+                Context 'EXAMPLE\TestGroup1' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '798C5D07-11C3-45C0-B767-124DF9A369A6' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup1'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'Administrators (built-in)' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '6F82151C-1B8A-4809-ABDD-1EA08F91C923' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 8
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'Administrators (built-in)'
+                        }
+                        It 'Group SID is correct' {
+                            $XMLDocument.Properties.groupSid | Should -BeExactly 'S-1-5-32-544'
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup3' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '5BFED1D1-5C42-4504-84E7-E62FA36A6E69' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup3'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'D'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup4' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq 'ED220833-3027-4071-80BE-0D0B50B781B3' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup4'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'C'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup5' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '4046D23B-4875-4E82-96B3-9920E9A9BDFF' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup5'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'R'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'LocalGroup1' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '483E7907-F4DF-439C-946D-91D2FE3AFC20' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'LocalGroup1'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly 'My Awesome Description'
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly 'LocalGroup2'
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'LocalGroup3' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '52D0DA5A-91FD-472B-83C4-E70EC7CD5ACB' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 8
+                        }
+                    }
+
+                    Context 'Content' {
+                        Context 'Common attributes' {
+                            It 'Group name is correct' {
+                                $XMLDocument.Properties.groupName | Should -BeExactly 'LocalGroup3'
+                            }
+                            It 'Group SID is absent' {
+                                $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                            }
+                            It 'Action is correct' {
+                                $XMLDocument.Properties.action | Should -BeExactly 'C'
+                            }
+                            It 'Description is correct' {
+                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            }
+                            It 'New group name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            }
+                            It 'deleteAllGroups set to 0' {
+                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                            }
+                            It 'deleteAllUsers set to 0' {
+                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                            }
+                            It 'removeAccounts set to 0' {
+                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            }
+                        }
+
+                        Context 'Members' {
+                            Context 'Structure' {
+                                It 'Group members are present' {
+                                    $XMLDocument.Properties.Members | Should -Not -BeNullOrEmpty
+                                }
+                                It 'Member property is present' {
+                                    $XMLDocument.Properties.Members.Member | Should -Not -BeNullOrEmpty
+                                }
+                                It 'The number of members is correct' {
+                                    $XMLDocument.Properties.Members.Member.Count | Should -Be 4
+                                }
+                            }
+
+                            Context 'EXAMPLE\Administrator' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\Administrator' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST1' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST1' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1620'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST2' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST2' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST3' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST3' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Context 'Backup Operators (built-in)' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '880FFE86-78C7-4E85-AFDE-608C24977161' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 9
+                        }
+                    }
+
+                    Context 'Content' {
+                        Context 'Common attributes' {
+                            It 'Group name is correct' {
+                                $XMLDocument.Properties.groupName | Should -BeExactly 'Backup Operators (built-in)'
+                            }
+                            It 'Group SID is correct' {
+                                $XMLDocument.Properties.groupSid | Should -BeExactly 'S-1-5-32-551'
+                            }
+                            It 'Action is correct' {
+                                $XMLDocument.Properties.action | Should -BeExactly 'U'
+                            }
+                            It 'Description is correct' {
+                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            }
+                            It 'New group name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            }
+                            It 'deleteAllGroups set to 1' {
+                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '1'
+                            }
+                            It 'deleteAllUsers set to 1' {
+                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '1'
+                            }
+                            It 'removeAccounts set to 0' {
+                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            }
+                        }
+
+                        Context 'Members' {
+                            Context 'Structure' {
+                                It 'Group members are present' {
+                                    $XMLDocument.Properties.Members | Should -Not -BeNullOrEmpty
+                                }
+                                It 'Member property is present' {
+                                    $XMLDocument.Properties.Members.Member | Should -Not -BeNullOrEmpty
+                                }
+                                It 'The number of members is correct' {
+                                    $XMLDocument.Properties.Members.Member.Count | Should -Be 4
+                                }
+                            }
+
+                            Context 'EXAMPLE\Administrator' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\Administrator' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST1' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST1' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1620'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST2' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST2' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST3' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST3' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Context 'Groups-GroupsOnly-Set-2' {
+                BeforeAll {
+                    $GPPSection = $GPPSectionSet2
+                }
+
+                Context 'EXAMPLE\TestGroup1' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '798C5D07-11C3-45C0-B767-124DF9A369A6' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup1'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'Administrators (built-in)' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '6F82151C-1B8A-4809-ABDD-1EA08F91C923' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 8
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'Administrators (built-in)'
+                        }
+                        It 'Group SID is correct' {
+                            $XMLDocument.Properties.groupSid | Should -BeExactly 'S-1-5-32-544'
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup3' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '5BFED1D1-5C42-4504-84E7-E62FA36A6E69' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup3'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'D'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup4' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq 'ED220833-3027-4071-80BE-0D0B50B781B3' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup4'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'C'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup5' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '4046D23B-4875-4E82-96B3-9920E9A9BDFF' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup5'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'R'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'LocalGroup1' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '483E7907-F4DF-439C-946D-91D2FE3AFC20' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'LocalGroup1'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly 'My Awesome Description'
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly 'LocalGroup2'
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'LocalGroup3' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '52D0DA5A-91FD-472B-83C4-E70EC7CD5ACB' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 8
+                        }
+                    }
+
+                    Context 'Content' {
+                        Context 'Common attributes' {
+                            It 'Group name is correct' {
+                                $XMLDocument.Properties.groupName | Should -BeExactly 'LocalGroup3'
+                            }
+                            It 'Group SID is absent' {
+                                $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                            }
+                            It 'Action is correct' {
+                                $XMLDocument.Properties.action | Should -BeExactly 'C'
+                            }
+                            It 'Description is correct' {
+                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            }
+                            It 'New group name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            }
+                            It 'deleteAllGroups set to 0' {
+                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                            }
+                            It 'deleteAllUsers set to 0' {
+                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                            }
+                            It 'removeAccounts set to 0' {
+                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            }
+                        }
+
+                        Context 'Members' {
+                            Context 'Structure' {
+                                It 'Group members are present' {
+                                    $XMLDocument.Properties.Members | Should -Not -BeNullOrEmpty
+                                }
+                                It 'Member property is present' {
+                                    $XMLDocument.Properties.Members.Member | Should -Not -BeNullOrEmpty
+                                }
+                                It 'The number of members is correct' {
+                                    $XMLDocument.Properties.Members.Member.Count | Should -Be 4
+                                }
+                            }
+
+                            Context 'EXAMPLE\Administrator' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\Administrator' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST1' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST1' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1620'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST2' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST2' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST3' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST3' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Context 'Backup Operators (built-in)' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '880FFE86-78C7-4E85-AFDE-608C24977161' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 9
+                        }
+                    }
+
+                    Context 'Content' {
+                        Context 'Common attributes' {
+                            It 'Group name is correct' {
+                                $XMLDocument.Properties.groupName | Should -BeExactly 'Backup Operators (built-in)'
+                            }
+                            It 'Group SID is correct' {
+                                $XMLDocument.Properties.groupSid | Should -BeExactly 'S-1-5-32-551'
+                            }
+                            It 'Action is correct' {
+                                $XMLDocument.Properties.action | Should -BeExactly 'U'
+                            }
+                            It 'Description is correct' {
+                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            }
+                            It 'New group name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            }
+                            It 'deleteAllGroups set to 1' {
+                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '1'
+                            }
+                            It 'deleteAllUsers set to 1' {
+                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '1'
+                            }
+                            It 'removeAccounts set to 0' {
+                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            }
+                        }
+
+                        Context 'Members' {
+                            Context 'Structure' {
+                                It 'Group members are present' {
+                                    $XMLDocument.Properties.Members | Should -Not -BeNullOrEmpty
+                                }
+                                It 'Member property is present' {
+                                    $XMLDocument.Properties.Members.Member | Should -Not -BeNullOrEmpty
+                                }
+                                It 'The number of members is correct' {
+                                    $XMLDocument.Properties.Members.Member.Count | Should -Be 4
+                                }
+                            }
+
+                            Context 'EXAMPLE\Administrator' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\Administrator' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST1' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST1' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1620'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST2' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST2' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST3' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST3' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Describe 'ACCEPTANCE: Serialize-GPPItemPropertiesGroup' {
+            Context 'Groups-GroupsOnly-Set-1' {
+                BeforeAll {
+                    $GPPSection = $GPPSectionSet1
+                }
+
+                Context 'EXAMPLE\TestGroup1' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '798C5D07-11C3-45C0-B767-124DF9A369A6' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup1'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'Administrators (built-in)' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '6F82151C-1B8A-4809-ABDD-1EA08F91C923' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 8
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'Administrators (built-in)'
+                        }
+                        It 'Group SID is correct' {
+                            $XMLDocument.Properties.groupSid | Should -BeExactly 'S-1-5-32-544'
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup3' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '5BFED1D1-5C42-4504-84E7-E62FA36A6E69' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup3'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'D'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup4' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq 'ED220833-3027-4071-80BE-0D0B50B781B3' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup4'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'C'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup5' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '4046D23B-4875-4E82-96B3-9920E9A9BDFF' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup5'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'R'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'LocalGroup1' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '483E7907-F4DF-439C-946D-91D2FE3AFC20' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'LocalGroup1'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly 'My Awesome Description'
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly 'LocalGroup2'
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'LocalGroup3' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '52D0DA5A-91FD-472B-83C4-E70EC7CD5ACB' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 8
+                        }
+                    }
+
+                    Context 'Content' {
+                        Context 'Common attributes' {
+                            It 'Group name is correct' {
+                                $XMLDocument.Properties.groupName | Should -BeExactly 'LocalGroup3'
+                            }
+                            It 'Group SID is absent' {
+                                $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                            }
+                            It 'Action is correct' {
+                                $XMLDocument.Properties.action | Should -BeExactly 'C'
+                            }
+                            It 'Description is correct' {
+                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            }
+                            It 'New group name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            }
+                            It 'deleteAllGroups set to 0' {
+                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                            }
+                            It 'deleteAllUsers set to 0' {
+                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                            }
+                            It 'removeAccounts set to 0' {
+                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            }
+                        }
+
+                        Context 'Members' {
+                            Context 'Structure' {
+                                It 'Group members are present' {
+                                    $XMLDocument.Properties.Members | Should -Not -BeNullOrEmpty
+                                }
+                                It 'Member property is present' {
+                                    $XMLDocument.Properties.Members.Member | Should -Not -BeNullOrEmpty
+                                }
+                                It 'The number of members is correct' {
+                                    $XMLDocument.Properties.Members.Member.Count | Should -Be 4
+                                }
+                            }
+
+                            Context 'EXAMPLE\Administrator' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\Administrator' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST1' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST1' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1620'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST2' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST2' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST3' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST3' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Context 'Backup Operators (built-in)' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '880FFE86-78C7-4E85-AFDE-608C24977161' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 9
+                        }
+                    }
+
+                    Context 'Content' {
+                        Context 'Common attributes' {
+                            It 'Group name is correct' {
+                                $XMLDocument.Properties.groupName | Should -BeExactly 'Backup Operators (built-in)'
+                            }
+                            It 'Group SID is correct' {
+                                $XMLDocument.Properties.groupSid | Should -BeExactly 'S-1-5-32-551'
+                            }
+                            It 'Action is correct' {
+                                $XMLDocument.Properties.action | Should -BeExactly 'U'
+                            }
+                            It 'Description is correct' {
+                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            }
+                            It 'New group name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            }
+                            It 'deleteAllGroups set to 1' {
+                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '1'
+                            }
+                            It 'deleteAllUsers set to 1' {
+                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '1'
+                            }
+                            It 'removeAccounts set to 0' {
+                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            }
+                        }
+
+                        Context 'Members' {
+                            Context 'Structure' {
+                                It 'Group members are present' {
+                                    $XMLDocument.Properties.Members | Should -Not -BeNullOrEmpty
+                                }
+                                It 'Member property is present' {
+                                    $XMLDocument.Properties.Members.Member | Should -Not -BeNullOrEmpty
+                                }
+                                It 'The number of members is correct' {
+                                    $XMLDocument.Properties.Members.Member.Count | Should -Be 4
+                                }
+                            }
+
+                            Context 'EXAMPLE\Administrator' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\Administrator' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST1' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST1' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1620'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST2' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST2' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST3' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST3' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Context 'Groups-GroupsOnly-Set-2' {
+                BeforeAll {
+                    $GPPSection = $GPPSectionSet2
+                }
+
+                Context 'EXAMPLE\TestGroup1' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '798C5D07-11C3-45C0-B767-124DF9A369A6' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup1'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'Administrators (built-in)' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '6F82151C-1B8A-4809-ABDD-1EA08F91C923' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 8
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'Administrators (built-in)'
+                        }
+                        It 'Group SID is correct' {
+                            $XMLDocument.Properties.groupSid | Should -BeExactly 'S-1-5-32-544'
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup3' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '5BFED1D1-5C42-4504-84E7-E62FA36A6E69' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup3'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'D'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup4' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq 'ED220833-3027-4071-80BE-0D0B50B781B3' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup4'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'C'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'EXAMPLE\TestGroup5' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '4046D23B-4875-4E82-96B3-9920E9A9BDFF' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup5'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'R'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly ''
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly ''
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'LocalGroup1' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '483E7907-F4DF-439C-946D-91D2FE3AFC20' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                        }
+                    }
+
+                    Context 'Content' {
+                        It 'Group name is correct' {
+                            $XMLDocument.Properties.groupName | Should -BeExactly 'LocalGroup1'
+                        }
+                        It 'Group SID is absent' {
+                            $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                        }
+                        It 'Action is correct' {
+                            $XMLDocument.Properties.action | Should -BeExactly 'U'
+                        }
+                        It 'Description is correct' {
+                            $XMLDocument.Properties.description | Should -BeExactly 'My Awesome Description'
+                        }
+                        It 'New group name is correct' {
+                            $XMLDocument.Properties.newName | Should -BeExactly 'LocalGroup2'
+                        }
+                        It 'deleteAllGroups set to 0' {
+                            $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                        }
+                        It 'deleteAllUsers set to 0' {
+                            $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                        }
+                        It 'removeAccounts set to 0' {
+                            $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                        }
+                    }
+                }
+
+                Context 'LocalGroup3' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '52D0DA5A-91FD-472B-83C4-E70EC7CD5ACB' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 8
+                        }
+                    }
+
+                    Context 'Content' {
+                        Context 'Common attributes' {
+                            It 'Group name is correct' {
+                                $XMLDocument.Properties.groupName | Should -BeExactly 'LocalGroup3'
+                            }
+                            It 'Group SID is absent' {
+                                $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
+                            }
+                            It 'Action is correct' {
+                                $XMLDocument.Properties.action | Should -BeExactly 'C'
+                            }
+                            It 'Description is correct' {
+                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            }
+                            It 'New group name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            }
+                            It 'deleteAllGroups set to 0' {
+                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                            }
+                            It 'deleteAllUsers set to 0' {
+                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                            }
+                            It 'removeAccounts set to 0' {
+                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            }
+                        }
+
+                        Context 'Members' {
+                            Context 'Structure' {
+                                It 'Group members are present' {
+                                    $XMLDocument.Properties.Members | Should -Not -BeNullOrEmpty
+                                }
+                                It 'Member property is present' {
+                                    $XMLDocument.Properties.Members.Member | Should -Not -BeNullOrEmpty
+                                }
+                                It 'The number of members is correct' {
+                                    $XMLDocument.Properties.Members.Member.Count | Should -Be 4
+                                }
+                            }
+
+                            Context 'EXAMPLE\Administrator' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\Administrator' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST1' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST1' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1620'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST2' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST2' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST3' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST3' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Context 'Backup Operators (built-in)' {
+                    BeforeAll {
+                        $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '880FFE86-78C7-4E85-AFDE-608C24977161' }).Properties
+                        [xml]$XMLDocument = Serialize-GPPItemPropertiesGroup -InputObject $Item
+                    }
+
+                    Context 'Structure' {
+                        It 'XML document exists' {
+                            $XMLDocument | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML document has correct number of properties' {
+                            ($XMLDocument | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 1
+                        }
+                        It 'XML Properties element exists' {
+                            $XMLDocument.Properties | Should -Not -BeNullOrEmpty
+                        }
+                        It 'XML Properties element has correct number of properties' {
+                            ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 9
+                        }
+                    }
+
+                    Context 'Content' {
+                        Context 'Common attributes' {
+                            It 'Group name is correct' {
+                                $XMLDocument.Properties.groupName | Should -BeExactly 'Backup Operators (built-in)'
+                            }
+                            It 'Group SID is correct' {
+                                $XMLDocument.Properties.groupSid | Should -BeExactly 'S-1-5-32-551'
+                            }
+                            It 'Action is correct' {
+                                $XMLDocument.Properties.action | Should -BeExactly 'U'
+                            }
+                            It 'Description is correct' {
+                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            }
+                            It 'New group name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            }
+                            It 'deleteAllGroups set to 1' {
+                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '1'
+                            }
+                            It 'deleteAllUsers set to 1' {
+                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '1'
+                            }
+                            It 'removeAccounts set to 0' {
+                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            }
+                        }
+
+                        Context 'Members' {
+                            Context 'Structure' {
+                                It 'Group members are present' {
+                                    $XMLDocument.Properties.Members | Should -Not -BeNullOrEmpty
+                                }
+                                It 'Member property is present' {
+                                    $XMLDocument.Properties.Members.Member | Should -Not -BeNullOrEmpty
+                                }
+                                It 'The number of members is correct' {
+                                    $XMLDocument.Properties.Members.Member.Count | Should -Be 4
+                                }
+                            }
+
+                            Context 'EXAMPLE\Administrator' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\Administrator' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST1' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST1' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1620'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'ADD'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST2' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST2' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 2
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
+                            }
+
+                            Context 'EXAMPLE\TEST3' {
+                                BeforeAll {
+                                    $Member = $XMLDocument.Properties.Members.Member | Where-Object -FilterScript { $_.name -eq 'EXAMPLE\TEST3' }
+                                }
+                                Context 'Structure' {
+                                    It 'XML element exists' {
+                                        $Member | Should -Not -BeNullOrEmpty
+                                    }
+                                    It 'XML element has a correct number of properties' {
+                                        ($Member | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 3
+                                    }
+                                }
+
+                                Context 'Content' {
+                                    It 'Member name is correct' {
+                                        $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
+                                    }
+                                    It 'SID is correct' {
+                                        $Member.sid | Should -BeExactly 'S-1-5-21-2571216883-1601522099-2002488368-1622'
+                                    }
+                                    It 'Action is correct' {
+                                        $Member.action | Should -BeExactly 'REMOVE'
+                                    }
+                                }
                             }
                         }
                     }
