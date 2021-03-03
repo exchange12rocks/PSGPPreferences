@@ -6595,6 +6595,14 @@ Describe 'Internal functions' {
             }
         }
 
+        Describe 'UNIT: Serialize-GPPItemGroup' {
+            
+        }
+
+        Describe 'ACCEPTANCE: Serialize-GPPItemGroup' {
+            
+        }
+
         <#Describe 'UNIT: Serialize-GPPSection' {
             Context 'Groups' {
                 Context 'Groups-GroupsOnly-Set-1' {
