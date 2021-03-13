@@ -76,8 +76,7 @@ function Set-GPPGroupMember {
         $GPOId = Convert-GPONameToID -Name $GPOName
     }
 
-    #$GroupsSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
-    $GroupsSection = $GrpSection
+    $GroupsSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
     if ($GroupsSection) {
         $GetGPPGroupParameters = @{
             GPPSection = $GroupsSection
