@@ -2,7 +2,7 @@ BeforeDiscovery {
     $ScriptDirectoryPath = $PSScriptRoot
     $ModuleRootPath = Join-Path -Path $ScriptDirectoryPath -ChildPath ..\
     Import-Module -Name (Join-Path -Path $ModuleRootPath -ChildPath 'PSGPPreferences.psd1') -Force
-    . (Join-Path -Path $ModuleRootPath -ChildPath 'Definitions\Classes.ps1')
+    . (Join-Path -Path $ModuleRootPath -ChildPath 'src\Definitions\Classes.ps1')
 }
 
 Describe 'Internal functions' {
