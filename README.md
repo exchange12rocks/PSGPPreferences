@@ -41,13 +41,13 @@ Your help is welcome and appreciated.
 
 ## Roadmap
 
-1. Add Users support (section "Local Users and Groups") and add some tests
-1. More tests
+1. [IN PROGRESS] Add Users support (section "Local Users and Groups") and add some tests
 1. Support for changing the following properties:
     * [bool]$removePolicy
     * [bool]$bypassErrors
 1. Support for disabling whole sections
-1. Devices (v.0.3)
+1. More tests
+1. Devices
 1. User context (v.1.0)
 1. Services (v.1.0)
 1. Filters (v.1.1)
