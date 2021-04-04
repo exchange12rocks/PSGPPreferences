@@ -20,7 +20,7 @@ enum GPPType {
 
 enum GPPContext {
     Machine
-#    User  I'll enable it later
+    #User  I'll enable it later
 }
 
 class PSGPPreferencesItem {
@@ -424,24 +424,90 @@ class GPPItemPropertiesUser : GPPItemProperties {
     [bool]$noChange
     [bool]$neverExpires
     [bool]$acctDisabled
-    [GPPItemUserSubAuthority]$subAuthority
+    [nullable[GPPItemUserSubAuthority]]$subAuthority
     [string]$userName
     [string]$expires
+
+    hidden static [string] GetSubAuthorityDisplayNameById ([string] $ID) {
+        $GPPItemUserSubAuthorityDisplayName = @(
+            'Administrator (built-in)'
+            'Guest (built-in)'
+        )
+        return $GPPItemUserSubAuthorityDisplayName[$ID]
+    }
+
+    GPPItemPropertiesUser ([GPPItemAction] $Action, [string] $Name, [string] $NewName, [string] $FullName, [string] $Description, [bool] $UserMustChangePassword, [bool] $AccountDisabled, [nullable[datetime]] $AccountExpires) {
+        $this.action = $Action
+        $this.subAuthority = $null
+        $this.userName = $Name
+        $this.newName = $NewName
+        $this.fullName = $FullName
+        $this.description = $Description
+        $this.changeLogon = $UserMustChangePassword
+        $this.acctDisabled = $AccountDisabled
+        if ($AccountExpires) {
+            $this.expires = Convert-DateTimeToGPPExpirationDate -DateTime $AccountExpires
+        }
+    }
+
+    GPPItemPropertiesUser ([GPPItemAction] $Action, [string] $Name, [string] $NewName, [string] $FullName, [string] $Description, [bool] $UserMayNotChangePassword, [bool] $PasswordNeverExpires, [bool] $AccountDisabled, [nullable[datetime]] $AccountExpires) {
+        $this.action = $Action
+        $this.subAuthority = $null
+        $this.userName = $Name
+        $this.newName = $NewName
+        $this.fullName = $FullName
+        $this.description = $Description
+        $this.noChange = $UserMayNotChangePassword
+        $this.neverExpires = $PasswordNeverExpires
+        $this.acctDisabled = $AccountDisabled
+        if ($AccountExpires) {
+            $this.expires = Convert-DateTimeToGPPExpirationDate -DateTime $AccountExpires
+        }
+    }
+
+    GPPItemPropertiesUser ([GPPItemAction] $Action, [GPPItemUserSubAuthority] $BuiltInUser, [string] $NewName, [string] $FullName, [string] $Description, [bool] $UserMustChangePassword, [bool] $AccountDisabled, [nullable[datetime]] $AccountExpires) {
+        $this.action = $Action
+        $this.subAuthority = $BuiltInUser
+        $this.userName = [GPPItemPropertiesUser]::GetSubAuthorityDisplayNameById($BuiltInUser.value__)
+        $this.newName = $NewName
+        $this.fullName = $FullName
+        $this.description = $Description
+        $this.changeLogon = $UserMustChangePassword
+        $this.acctDisabled = $AccountDisabled
+        if ($AccountExpires) {
+            $this.expires = Convert-DateTimeToGPPExpirationDate -DateTime $AccountExpires
+        }
+    }
+
+    GPPItemPropertiesUser ([GPPItemAction] $Action, [GPPItemUserSubAuthority] $BuiltInUser, [string] $NewName, [string] $FullName, [string] $Description, [bool] $UserMayNotChangePassword, [bool] $PasswordNeverExpires, [bool] $AccountDisabled, [nullable[datetime]] $AccountExpires) {
+        $this.action = $Action
+        $this.subAuthority = $BuiltInUser
+        $this.userName = [GPPItemPropertiesUser]::GetSubAuthorityDisplayNameById($BuiltInUser.value__)
+        $this.newName = $NewName
+        $this.fullName = $FullName
+        $this.description = $Description
+        $this.noChange = $UserMayNotChangePassword
+        $this.neverExpires = $PasswordNeverExpires
+        $this.acctDisabled = $AccountDisabled
+        if ($AccountExpires) {
+            $this.expires = Convert-DateTimeToGPPExpirationDate -DateTime $AccountExpires
+        }
+    }
 }
 
 class GPPItemUser : GPPItemGroupsSection {
     static [guid]$clsid = '{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}'
     [GPPItemPropertiesUser]$Properties
 
-    GPPItemUser([GPPItemPropertiesGroup] $Properties, [bool] $Disabled) {
+    GPPItemUser([GPPItemPropertiesUser] $Properties, [bool] $Disabled) {
         $this.Properties = $Properties
-        $this.name = $Properties.groupName
+        $this.name = $Properties.userName
         $this.disabled = $Disabled
     }
 
-    GPPItemUser([GPPItemPropertiesGroup] $Properties, [guid] $UID, [bool] $Disabled) {
+    GPPItemUser([GPPItemPropertiesUser] $Properties, [guid] $UID, [bool] $Disabled) {
         $this.Properties = $Properties
-        $this.name = $Properties.groupName
+        $this.name = $Properties.userName
         $this.uid = $UID
         $this.disabled = $Disabled
     }
