@@ -221,5 +221,3 @@ function New-GPPUser {
         $User
     }
 }
-
-New-GPPUser -Update -AccountExpires (Get-Date) -BuiltInUser RID_ADMIN
