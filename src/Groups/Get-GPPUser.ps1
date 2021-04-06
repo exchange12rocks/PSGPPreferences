@@ -1,5 +1,5 @@
-function Get-GPPGroup {
-    [OutputType('GPPItemGroup')]
+function Get-GPPUser {
+    [OutputType('GPPItemUser')]
     Param (
         [Parameter(ParameterSetName = 'ByGPONameGroupName')]
         [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
@@ -9,36 +9,36 @@ function Get-GPPGroup {
         [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionGroupLiteralName', Mandatory)]
         [string]$LiteralName,
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupSID', Mandatory)]
-        [System.Security.Principal.SecurityIdentifier]$SID,
+        [Parameter(ParameterSetName = 'ByGPONameBuiltInUser', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdBuiltInUser', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionBuiltInUser', Mandatory)]
+        [GPPItemUserSubAuthority]$BuiltInUser,
         [Parameter(ParameterSetName = 'ByGPONameGroupUID', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdGroupUID', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionGroupUID', Mandatory)]
         [guid]$UID,
         [Parameter(ParameterSetName = 'ByGPONameGroupName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameBuiltInUser', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameGroupUID', Mandatory)]
         [string]$GPOName,
         [Parameter(ParameterSetName = 'ByGPOIdGroupName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdBuiltInUser', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdGroupUID', Mandatory)]
         [guid]$GPOId,
         [Parameter(ParameterSetName = 'ByGPPSectionGroupName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionBuiltInUser', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionGroupUID', Mandatory)]
         [GPPSection]$GPPSection,
         [Parameter(ParameterSetName = 'ByGPONameGroupName')]
         [Parameter(ParameterSetName = 'ByGPONameGroupLiteralName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameBuiltInUser')]
         [Parameter(ParameterSetName = 'ByGPONameGroupUID')]
         [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
         [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdBuiltInUser')]
         [Parameter(ParameterSetName = 'ByGPOIdGroupUID')]
         [GPPContext]$Context = $ModuleWideDefaultGPPContext
     )
@@ -50,17 +50,18 @@ function Get-GPPGroup {
 
         $GroupsSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
     }
-    $Groups = $GroupsSection.Members | Where-Object -FilterScript { $_ -is [GPPItemGroup] }
-    if ($Groups) {
+
+    $Users = $GroupsSection.Members | Where-Object -FilterScript { $_ -is [GPPItemUser] }
+    if ($Users) {
         $FilterScript = if ($UID) {
-            {$_.uid -eq $UID}
+            { $_.uid -eq $UID }
         }
-        elseif ($SID) {
-            {$_.Properties.groupSid -eq $SID}
+        elseif ($BuiltInUser) {
+            { $_.Properties.subAuthority -eq $BuiltInUser }
         }
         else {
             if ($LiteralName) {
-                {$_.Properties.groupName -eq $LiteralName}
+                { $_.Properties.groupName -eq $LiteralName }
             }
             else {
                 $FilterName = if ($Name) {
@@ -69,9 +70,9 @@ function Get-GPPGroup {
                 else {
                     '*'
                 }
-                {$_.Properties.groupName -like $FilterName}
+                { $_.Properties.groupName -like $FilterName }
             }
         }
     }
-    $Groups | Where-Object -FilterScript $FilterScript
+    $Users | Where-Object -FilterScript $FilterScript
 }
