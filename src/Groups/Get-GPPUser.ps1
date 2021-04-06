@@ -1,45 +1,45 @@
 function Get-GPPUser {
     [OutputType('GPPItemUser')]
     Param (
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupName')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectName')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectName')]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectName')]
         [string]$Name,
-        [Parameter(ParameterSetName = 'ByGPONameGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectLiteralName', Mandatory)]
         [string]$LiteralName,
         [Parameter(ParameterSetName = 'ByGPONameBuiltInUser', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdBuiltInUser', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionBuiltInUser', Mandatory)]
         [GPPItemUserSubAuthority]$BuiltInUser,
-        [Parameter(ParameterSetName = 'ByGPONameGroupUID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupUID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectUID', Mandatory)]
         [guid]$UID,
-        [Parameter(ParameterSetName = 'ByGPONameGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPONameGroupLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectLiteralName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameBuiltInUser', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPONameGroupUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectUID', Mandatory)]
         [string]$GPOName,
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectLiteralName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdBuiltInUser', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectUID', Mandatory)]
         [guid]$GPOId,
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectLiteralName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionBuiltInUser', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectUID', Mandatory)]
         [GPPSection]$GPPSection,
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectName')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectLiteralName')]
         [Parameter(ParameterSetName = 'ByGPONameBuiltInUser')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupUID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectUID')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectName')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectLiteralName')]
         [Parameter(ParameterSetName = 'ByGPOIdBuiltInUser')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupUID')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectUID')]
         [GPPContext]$Context = $ModuleWideDefaultGPPContext
     )
 
@@ -48,10 +48,10 @@ function Get-GPPUser {
             $GPOId = Convert-GPONameToID -Name $GPOName
         }
 
-        $GroupsSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
+        $GPPSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
     }
 
-    $Users = $GroupsSection.Members | Where-Object -FilterScript { $_ -is [GPPItemUser] }
+    $Users = $GPPSection.Members | Where-Object -FilterScript { $_ -is [GPPItemUser] }
     if ($Users) {
         $FilterScript = if ($UID) {
             { $_.uid -eq $UID }
@@ -61,7 +61,7 @@ function Get-GPPUser {
         }
         else {
             if ($LiteralName) {
-                { $_.Properties.groupName -eq $LiteralName }
+                { $_.Properties.userName -eq $LiteralName }
             }
             else {
                 $FilterName = if ($Name) {
@@ -70,7 +70,7 @@ function Get-GPPUser {
                 else {
                     '*'
                 }
-                { $_.Properties.groupName -like $FilterName }
+                { $_.Properties.userName -like $FilterName }
             }
         }
     }
