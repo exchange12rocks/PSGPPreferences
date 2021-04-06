@@ -13,17 +13,5 @@ function Add-GPPGroup {
         [GPPContext]$Context = $ModuleWideDefaultGPPContext
     )
 
-    if (-not $GPOId) {
-        $GPOId = Convert-GPONameToID -Name $GPOName
-    }
-
-    $GroupsSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
-    if ($GroupsSection) {
-        $GroupsSection.Members.Add($InputObject)
-    }
-    else {
-        $GroupsSection = [GPPSectionGroups]::new($InputObject, $false)
-    }
-
-    Set-GPPSection -InputObject $GroupsSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
+    Add-GPPGroupsItem @PSBoundParameters -Context $Context
 }
