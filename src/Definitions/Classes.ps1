@@ -493,6 +493,31 @@ class GPPItemPropertiesUser : GPPItemProperties {
             $this.expires = Convert-DateTimeToGPPExpirationDate -DateTime $AccountExpires
         }
     }
+
+    GPPItemPropertiesUser ([GPPItemAction] $Action, [nullable[GPPItemUserSubAuthority]] $BuiltInUser, [string] $Name, [string] $NewName, [string] $FullName, [string] $Description, [bool] $UserMustChangePassword, [bool] $AccountDisabled, [string] $AccountExpires) {
+        $this.action = $Action
+        $this.subAuthority = $BuiltInUser
+        $this.userName = $Name
+        $this.newName = $NewName
+        $this.fullName = $FullName
+        $this.description = $Description
+        $this.changeLogon = $UserMustChangePassword
+        $this.acctDisabled = $AccountDisabled
+        $this.expires = $AccountExpires
+    }
+
+    GPPItemPropertiesUser ([GPPItemAction] $Action, [nullable[GPPItemUserSubAuthority]] $BuiltInUser, [string] $Name, [string] $NewName, [string] $FullName, [string] $Description, [bool] $UserMayNotChangePassword, [bool] $PasswordNeverExpires, [bool] $AccountDisabled, [string] $AccountExpires) {
+        $this.action = $Action
+        $this.subAuthority = $BuiltInUser
+        $this.userName = $Name
+        $this.newName = $NewName
+        $this.fullName = $FullName
+        $this.description = $Description
+        $this.noChange = $UserMayNotChangePassword
+        $this.neverExpires = $PasswordNeverExpires
+        $this.acctDisabled = $AccountDisabled
+        $this.expires = $AccountExpires
+    }
 }
 
 class GPPItemUser : GPPItemGroupsSection {
