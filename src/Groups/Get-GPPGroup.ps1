@@ -1,45 +1,45 @@
 function Get-GPPGroup {
     [OutputType('GPPItemGroup')]
     Param (
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupName')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectName')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectName')]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectName')]
         [string]$Name,
-        [Parameter(ParameterSetName = 'ByGPONameGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectLiteralName', Mandatory)]
         [string]$LiteralName,
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectSID', Mandatory)]
         [System.Security.Principal.SecurityIdentifier]$SID,
-        [Parameter(ParameterSetName = 'ByGPONameGroupUID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupUID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectUID', Mandatory)]
         [guid]$UID,
-        [Parameter(ParameterSetName = 'ByGPONameGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPONameGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPONameGroupUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectpName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectUID', Mandatory)]
         [string]$GPOName,
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectUID', Mandatory)]
         [guid]$GPOId,
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupLiteralName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupSID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPPSectionGroupUID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPPSectionObjectUID', Mandatory)]
         [GPPSection]$GPPSection,
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupLiteralName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupUID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupLiteralName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupUID')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectName')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectSID')]
+        [Parameter(ParameterSetName = 'ByGPONameObjectUID')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectName')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdObjectUID')]
         [GPPContext]$Context = $ModuleWideDefaultGPPContext
     )
 
@@ -48,19 +48,20 @@ function Get-GPPGroup {
             $GPOId = Convert-GPONameToID -Name $GPOName
         }
 
-        $GroupsSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
+        $GPPSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
     }
-    $Groups = $GroupsSection.Members | Where-Object -FilterScript { $_ -is [GPPItemGroup] }
+
+    $Groups = $GPPSection.Members | Where-Object -FilterScript { $_ -is [GPPItemGroup] }
     if ($Groups) {
         $FilterScript = if ($UID) {
-            {$_.uid -eq $UID}
+            { $_.uid -eq $UID }
         }
         elseif ($SID) {
-            {$_.Properties.groupSid -eq $SID}
+            { $_.Properties.groupSid -eq $SID }
         }
         else {
             if ($LiteralName) {
-                {$_.Properties.groupName -eq $LiteralName}
+                { $_.Properties.groupName -eq $LiteralName }
             }
             else {
                 $FilterName = if ($Name) {
@@ -69,7 +70,7 @@ function Get-GPPGroup {
                 else {
                     '*'
                 }
-                {$_.Properties.groupName -like $FilterName}
+                { $_.Properties.groupName -like $FilterName }
             }
         }
     }
