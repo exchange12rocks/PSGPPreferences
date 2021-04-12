@@ -17,7 +17,7 @@ function New-GPPUser {
         [Parameter(ParameterSetName = 'BuiltInUserUpdateUserMustChangePassword', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameBuiltInUserUpdateUserMustChangePassword', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdBuiltInUserUpdateUserMustChangePassword', Mandatory)]
-        [GPPItemUserSubAuthority]$BuiltInUser,
+        [GPPItemUserSubAuthorityDisplay]$BuiltInUser,
         [Parameter(ParameterSetName = 'ByObjectNameUpdate', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameObjectNameUpdate', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdObjectNameUpdate', Mandatory)]
@@ -181,11 +181,13 @@ function New-GPPUser {
     }
 
     $Properties = if ($PSBoundParameters.ContainsKey('BuiltInUser')) {
+        $BuiltInUserInternal = [GPPItemUserSubAuthority]$BuiltInUser.value__
+
         if ($PSBoundParameters.ContainsKey('UserMustChangePassword')) {
-            [GPPItemPropertiesUser]::new($Action, $BuiltInUser, $NewName, $FullName, $Description, $UserMustChangePassword, $AccountDisabled, $AccountExpires)
+            [GPPItemPropertiesUser]::new($Action, $BuiltInUserInternal, $NewName, $FullName, $Description, $UserMustChangePassword, $AccountDisabled, $AccountExpires)
         }
         else {
-            [GPPItemPropertiesUser]::new($Action, $BuiltInUser, $NewName, $FullName, $Description, $UserMayNotChangePassword, $PasswordNeverExpires, $AccountDisabled, $AccountExpires)
+            [GPPItemPropertiesUser]::new($Action, $BuiltInUserInternal, $NewName, $FullName, $Description, $UserMayNotChangePassword, $PasswordNeverExpires, $AccountDisabled, $AccountExpires)
         }
     }
     else {

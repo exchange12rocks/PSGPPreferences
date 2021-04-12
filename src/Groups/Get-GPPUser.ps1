@@ -12,7 +12,7 @@ function Get-GPPUser {
         [Parameter(ParameterSetName = 'ByGPONameBuiltInUser', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdBuiltInUser', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionBuiltInUser', Mandatory)]
-        [GPPItemUserSubAuthority]$BuiltInUser,
+        [GPPItemUserSubAuthorityDisplay]$BuiltInUser,
         [Parameter(ParameterSetName = 'ByGPONameObjectUID', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdObjectUID', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionObjectUID', Mandatory)]
@@ -57,7 +57,8 @@ function Get-GPPUser {
             { $_.uid -eq $UID }
         }
         elseif ($BuiltInUser) {
-            { $_.Properties.subAuthority -eq $BuiltInUser }
+            $BuiltInUserInternal = [GPPItemUserSubAuthority]$BuiltInUser.value__
+            { $_.Properties.subAuthority -eq $BuiltInUserInternal }
         }
         else {
             if ($LiteralName) {
