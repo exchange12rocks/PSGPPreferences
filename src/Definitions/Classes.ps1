@@ -309,9 +309,19 @@ enum GPPItemGroupMemberAction {
     REMOVE
 }
 
+enum GPPItemUserActionDisplay {
+    Update
+    Delete
+}
+
 enum GPPItemUserSubAuthority {
     RID_ADMIN
     RID_GUEST
+}
+
+enum GPPItemUserSubAuthorityDisplay {
+    Administrator
+    Guest
 }
 
 class GPPItemGroupsSection : GPPItem {
