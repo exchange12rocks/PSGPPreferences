@@ -18,6 +18,11 @@
         'Remove-GPPGroupMember'
         'Set-GPPGroup'
         'Set-GPPGroupMember'
+        'Add-GPPUser'
+        'Get-GPPUser'
+        'New-GPPUser'
+        'Set-GPPUser'
+        'Remove-GPPUser'
     )
     CmdletsToExport   = @()
     AliasesToExport   = @()

@@ -5,42 +5,42 @@ online version:
 schema: 2.0.0
 ---
 
-# Add-GPPGroup
+# Add-GPPUser
 
 ## SYNOPSIS
-Adds a group into a Group Policy Object
+Adds a user item into a Group Policy Object
 
 ## SYNTAX
 
 ### ById
 ```
-Add-GPPGroup -InputObject <GPPItemGroup> -GPOId <Guid> [-Context <GPPContext>] [<CommonParameters>]
+Add-GPPUser -InputObject <GPPItemUser> -GPOId <Guid> [-Context <GPPContext>] [<CommonParameters>]
 ```
 
 ### ByName
 ```
-Add-GPPGroup -InputObject <GPPItemGroup> -GPOName <String> [-Context <GPPContext>] [<CommonParameters>]
+Add-GPPUser -InputObject <GPPItemUser> -GPOName <String> [-Context <GPPContext>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Use this function to add a group into a Group Policy Object. First you have to create a new group definition object using New-GPPGroup.
-This function is useful if you want to add the same group definition into several Group Policy objects. If you just want to create a single group and add it into a GPO immediately, you can just use the -GPOName/GPOId parameter at New-GPPGroup.
+Use this function to add a user into a Group Policy Object. First you have to create a new user definition object using New-GPPUser.
+This function is useful if you want to add the same user definition into several Group Policy objects. If you just want to create a single user and add it into a GPO immediately, you can just use the -GPOName/GPOId parameter of New-GPPGroup.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> Add-GPPGroup -InputObject $GroupObject -GPOName 'TEST'
+PS C:\> Add-GPPUser -InputObject $UserObject -GPOName 'TEST'
 ```
 
-Adds a group object $GroupObject into a Group Policy named TEST.
+Adds a user definition object $Userbject into a Group Policy named TEST.
 
 ### Example 2
 ```powershell
-PS C:\> Add-GPPGroup -InputObject $GroupObject -GPOId '31B2F340-016D-11D2-945F-00C04FB984F9'
+PS C:\> Add-GPPUser -InputObject $UserObject -GPOId '31B2F340-016D-11D2-945F-00C04FB984F9'
 ```
 
-Adds a group definition object $GroupObject into a Group Policy by using its ID (see the description for the -GPOId parameter below).
+Adds a user definition object $UserObject into a Group Policy by using its ID (see the description for the -GPOId parameter below).
 
 ## PARAMETERS
 
@@ -61,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -GPOId
-Specifies a Group Policy object ID into which you want to add a group. It is a name of a Group Policy's object in Active Directory. Look into a CN=Policies,CN=System container in your AD DS domain.
+Specifies a Group Policy object ID into which you want to add a user. It is a name of a Group Policy's object in Active Directory. Look into a CN=Policies,CN=System container in your AD DS domain.
 
 ```yaml
 Type: Guid
@@ -76,7 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### -GPOName
-Specifies a Group Policy object name into which you want to add a group.
+Specifies a Group Policy object name into which you want to add a user.
 
 ```yaml
 Type: String
@@ -91,10 +91,10 @@ Accept wildcard characters: False
 ```
 
 ### -InputObject
-Specifies an object of a group definition which you want to add into a GPO. You can create one with New-GPPGroup.
+Specifies an object of a user definition which you want to add into a GPO. You can create one with New-GPPUser.
 
 ```yaml
-Type: GPPItemGroup
+Type: GPPItemUser
 Parameter Sets: (All)
 Aliases:
 
@@ -110,7 +110,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### GPPItemGroup
+### None
 
 ## OUTPUTS
 

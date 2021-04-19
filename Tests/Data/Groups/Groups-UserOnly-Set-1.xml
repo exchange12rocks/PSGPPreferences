@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Groups clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}">
+	<User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="eee" image="2" changed="2021-03-21 13:16:55" uid="{868E37FD-3A7C-4D17-BF77-2F9A1663B3FD}" userContext="0" removePolicy="0">
+		<Properties action="U" newName="sss" fullName="trtrt hhhhh" description="deeeeesc" cpassword="" changeLogon="1" noChange="0" neverExpires="0" acctDisabled="1" userName="eee"/>
+	</User>
+	<User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="eee2" image="2" changed="2021-03-21 13:17:17" uid="{B0BD4312-90F3-41E5-BC2C-3F37818233B1}" userContext="0" removePolicy="0">
+		<Properties action="U" newName="sss" fullName="trtrt hhhhh" description="deeeeesc" cpassword="" changeLogon="0" noChange="1" neverExpires="1" acctDisabled="0" subAuthority="" userName="eee2" expires="2021-04-16"/>
+	</User>
+	<User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="Guest (built-in)" image="2" changed="2021-03-21 14:02:38" uid="{004D9C20-5740-41C2-93D3-6950F1FB1FD9}">
+		<Properties action="U" newName="asd" fullName="" description="" cpassword="" changeLogon="0" noChange="0" neverExpires="1" acctDisabled="0" subAuthority="RID_GUEST" userName="Guest (built-in)"/>
+	</User>
+	<User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="Administrator (built-in)" image="2" changed="2021-03-21 14:02:56" uid="{99D76A31-862D-4487-A220-2D315A60A9A8}">
+		<Properties action="U" newName="" fullName="" description="eded" cpassword="" changeLogon="0" noChange="1" neverExpires="0" acctDisabled="0" subAuthority="RID_ADMIN" userName="Administrator (built-in)"/>
+	</User>
+	<User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="abn" image="2" changed="2021-03-21 17:45:26" uid="{669E9728-64EC-41E0-9A74-B1BD1179D025}">
+		<Properties action="U" newName="" fullName="" description="" cpassword="" changeLogon="0" noChange="0" neverExpires="0" acctDisabled="0" userName="abn"/>
+	</User>
+</Groups>

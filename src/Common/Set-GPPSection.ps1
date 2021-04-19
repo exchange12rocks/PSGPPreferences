@@ -24,7 +24,13 @@ function Set-GPPSection {
     $XMLDocument = $SectionDescription.XMLDocument
     $Type = $SectionDescription.Type
 
-    $FilePath = Get-GPPSectionFilePath -GPOId $GPOId -Context $Context -Type $Type
+    $GPPSectionFilePathResult = Get-GPPSectionFilePath -GPOId $GPOId -Context $Context -Type $Type -Extended
+    $FilePath = $GPPSectionFilePathResult.FilePath
+    $FolderPath = $GPPSectionFilePathResult.FolderPath
+
+    if (-not (Test-Path -Path $FolderPath)) {
+        $null = New-Item -Path $FolderPath -ItemType Directory
+    }
 
     Set-Content -Path $FilePath -Value $XMLDocument.OuterXml
 }
