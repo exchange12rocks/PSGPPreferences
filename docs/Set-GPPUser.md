@@ -284,7 +284,7 @@ Accept wildcard characters: False
 ```
 
 ### -LiteralName
-Specifies the name of a group which you want to change. Does not support wildcards.
+Specifies the name of a user which you want to change. Does not support wildcards.
 
 ```yaml
 Type: String
