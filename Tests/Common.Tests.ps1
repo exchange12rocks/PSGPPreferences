@@ -23,5 +23,9 @@ Describe 'Internal functions' {
         Describe 'UNIT: Convert-GPONameToID' {
             # Impossible to test due to the dependency on the System.DirectoryServices.DirectorySearcher class and we can't mock classes yet.
         }
+
+        Describe 'UNIT: Get-GPPSectionFilePath' {
+            # Impossible to test because the function operates network paths inside.
+        }
     }
 }

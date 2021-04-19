@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-GPPGroup
 
 ## SYNOPSIS
-Sets properties of a GPP group object in a specified Group Policy object.
+Sets properties of a group definition in a specified Group Policy object.
 
 ## SYNTAX
 
@@ -26,28 +26,42 @@ Set-GPPGroup -InputObject <GPPItemGroup> -GPOName <String> [-Context <GPPContext
  [-DeleteAllGroups] [-Disable] [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
-### ByGPOIdGroupName
+### ByGPOIdItemName
 ```
 Set-GPPGroup -Name <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
  [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
  [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
-### ByGPONameGroupName
+### ByGPONameItemName
 ```
 Set-GPPGroup -Name <String> -GPOName <String> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
  [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
  [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
-### ByGPOIdGroupSID
+### ByGPOIdItemLiteralName
+```
+Set-GPPGroup -LiteralName <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
+ [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
+ [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPONameItemLiteralName
+```
+Set-GPPGroup -LiteralName <String> -GPOName <String> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
+ [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
+ [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPOIdItemSID
 ```
 Set-GPPGroup -SID <SecurityIdentifier> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
  [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
  [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
-### ByGPONameGroupSID
+### ByGPONameItemSID
 ```
 Set-GPPGroup -SID <SecurityIdentifier> -GPOName <String> [-Context <GPPContext>]
  [-Action <GPPItemActionDisplay>] [-NewName <String>] [-Description <String>] [-DeleteAllUsers]
@@ -55,8 +69,8 @@ Set-GPPGroup -SID <SecurityIdentifier> -GPOName <String> [-Context <GPPContext>]
 ```
 
 ## DESCRIPTION
-Sets properties of a GPP group object in a specified Group Policy object. You may also use it to write a GPP group object from memory into a GPO and changing some of its properties in the process.
-If you want just to add a group into a GPO, w/o any modifications, I suggest you to use Add-GPPGroup.
+Sets properties of a group definition in a specified Group Policy object. You may also use it to write a group definition object from memory into a GPO and changing some of its properties in the process.
+If you want just to add a group definition into a GPO, w/o any modifications, I suggest you to use Add-GPPGroup.
 
 ## EXAMPLES
 
@@ -173,7 +187,7 @@ Accept wildcard characters: False
 ```
 
 ### -Disable
-Disables processing of this group object. In the GUI you'll see it greyed out.
+Disables processing of this group definition. In the GUI you'll see it greyed out.
 
 ```yaml
 Type: SwitchParameter
@@ -192,7 +206,7 @@ Specifies the ID of a GPO in which you want to search for groups. It is a name o
 
 ```yaml
 Type: Guid
-Parameter Sets: ByGPOIdObject, ByGPOIdGroupName, ByGPOIdGroupSID
+Parameter Sets: ByGPOIdObject, ByGPOIdItemName, ByGPOIdItemLiteralName, ByGPOIdItemSID
 Aliases:
 
 Required: True
@@ -207,7 +221,7 @@ Specifies the name of a GPO in which you want to search for groups.
 
 ```yaml
 Type: String
-Parameter Sets: ByGPONameObject, ByGPONameGroupName, ByGPONameGroupSID
+Parameter Sets: ByGPONameObject, ByGPONameItemName, ByGPONameItemLiteralName, ByGPONameItemSID
 Aliases:
 
 Required: True
@@ -218,7 +232,7 @@ Accept wildcard characters: False
 ```
 
 ### -InputObject
-If you already have a GPP group object in memory, which you want to write into a Group Policy, you can pass in into this parameter.
+If you already have a group definition object in memory, which you want to write into a Group Policy, you can pass in into this parameter.
 
 ```yaml
 Type: GPPItemGroup
@@ -248,22 +262,22 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of a group which you want to change.
+Specifies the name of a group which you want to change. Supports wildcards.
 
 ```yaml
 Type: String
-Parameter Sets: ByGPOIdGroupName, ByGPONameGroupName
+Parameter Sets: ByGPOIdItemName, ByGPONameItemName
 Aliases:
 
 Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -NewName
-Specifies the new name of a group if you want to rename it on target hosts.
+Specifies a new name for a group if you want to rename it on target hosts.
 
 ```yaml
 Type: String
@@ -278,7 +292,7 @@ Accept wildcard characters: False
 ```
 
 ### -PassThru
-Returns a new group object to the pipeline.
+Returns a new group definition object to the pipeline.
 
 ```yaml
 Type: SwitchParameter
@@ -297,7 +311,22 @@ Specifies the SID of a group which you want to change.
 
 ```yaml
 Type: SecurityIdentifier
-Parameter Sets: ByGPOIdGroupSID, ByGPONameGroupSID
+Parameter Sets: ByGPOIdItemSID, ByGPONameItemSID
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LiteralName
+Specifies the name of a group which you want to change. Does not support wildcards.
+
+```yaml
+Type: String
+Parameter Sets: ByGPOIdItemLiteralName, ByGPONameItemLiteralName
 Aliases:
 
 Required: True

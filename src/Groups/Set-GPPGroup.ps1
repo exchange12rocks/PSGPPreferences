@@ -4,147 +4,168 @@ function Set-GPPGroup {
         [Parameter(ParameterSetName = 'ByGPONameObject', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdObject', Mandatory)]
         [GPPItemGroup]$InputObject,
-        [Parameter(ParameterSetName = 'ByGPONameGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameItemName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName', Mandatory)]
         [string]$Name,
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName', Mandatory)]
+        [string]$LiteralName,
+        [Parameter(ParameterSetName = 'ByGPONameItemSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID', Mandatory)]
         [System.Security.Principal.SecurityIdentifier]$SID,
         [Parameter(ParameterSetName = 'ByGPONameObject', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameItemName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID', Mandatory)]
         [string]$GPOName,
         [Parameter(ParameterSetName = 'ByGPOIdObject', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName', Mandatory)]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID', Mandatory)]
         [guid]$GPOId,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [GPPContext]$Context = $ModuleWideDefaultGPPContext,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [GPPItemActionDisplay]$Action,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [string]$NewName,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [string]$Description,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [switch]$DeleteAllUsers,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [switch]$DeleteAllGroups,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [switch]$Disable,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [GPPItemGroupMember[]]$Members,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupName')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupName')]
-        [Parameter(ParameterSetName = 'ByGPONameGroupSID')]
-        [Parameter(ParameterSetName = 'ByGPOIdGroupSID')]
+        [Parameter(ParameterSetName = 'ByGPONameItemName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
+        [Parameter(ParameterSetName = 'ByGPONameItemSID')]
+        [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
         [switch]$PassThru
     )
 
     if (-not $GPOId) {
         $GPOId = Convert-GPONameToID -Name $GPOName
     }
-    $GroupsSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
+    $GPPSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
 
-    if ($GroupsSection) {
-        $InternalAction = if ($PSBoundParameters.ContainsKey('Action')) {
-            [GPPItemAction]$Action.value__
-        }
-        else {
-            [GPPItemAction]::U
-        }
-
+    if ($GPPSection) {
         if (-not $InputObject) {
-            $GetGroupFunctionParameters = @{}
+            $GetFunctionParameters = @{}
 
             if ($SID) {
-                $GetGroupFunctionParameters.Add('SID', $SID)
+                $GetFunctionParameters.Add('SID', $SID)
+            }
+            elseif ($LiteralName) {
+                $GetFunctionParameters.Add('LiteralName', $LiteralName)
             }
             else {
-                $GetGroupFunctionParameters.Add('Name', $Name)
+                $GetFunctionParameters.Add('Name', $Name)
             }
 
-            if ($GroupsSection) {
-                $InputObject = Get-GPPGroup @GetGroupFunctionParameters -GPPSection $GroupsSection
-            }
-            else {
-                New-GPPGroup @GetGroupFunctionParameters -Create:$true
-            }
+            $InputObject = Get-GPPGroup @GetFunctionParameters -GPPSection $GPPSection
         }
 
         if ($PSBoundParameters.ContainsKey('Action')) {
-            $InputObject.Properties.Action = $InternalAction
-        }
-        if ($NewName) {
-            if ($InternalAction -eq [GPPItemAction]::U) {
-                $InputObject.Properties.NewName = $NewName
-                if (-not $PSBoundParameters.ContainsKey('Action')) {
-                    $InputObject.Properties.Action = $InternalAction
-                }
+            $InputObject.Properties.Action = if ($PSBoundParameters.ContainsKey('Action')) {
+                [GPPItemAction]$Action.value__
+            }
+            else {
+                [GPPItemAction]::U
             }
         }
-        if ($Description -and $InternalAction -ne [GPPItemAction]::D) {
-            $InputObject.Properties.Description = $Description
-        }
-        if ($DeleteAllUsers -and $InternalAction -ne [GPPItemAction]::D) {
-            $InputObject.Properties.DeleteAllUsers = $DeleteAllUsers
-        }
-        if ($DeleteAllGroups -and $InternalAction -ne [GPPItemAction]::D) {
-            $InputObject.Properties.DeleteAllGroups = $DeleteAllGroups
-        }
-        if ($Members -and $InternalAction -ne [GPPItemAction]::D) {
-            $InputObject.Properties.Members = $Members
-        }
 
-        # The NewName property applicable to the Update action only
-        if ($InputObject.Properties.Action -eq [GPPItemAction]::C -and $InputObject.Properties.NewName) {
-            $InputObject.Properties.NewName = $null
-        }
+        if ($InputObject.Properties.Action -ne [GPPItemAction]::D) {
+            if ($PSBoundParameters.ContainsKey('NewName')) {
+                if ($InputObject.Properties.Action -eq [GPPItemAction]::U) {
+                    $InputObject.Properties.NewName = $NewName
+                }
+            }
+            if ($PSBoundParameters.ContainsKey('Description')) {
+                $InputObject.Properties.Description = $Description
+            }
+            if ($PSBoundParameters.ContainsKey('DeleteAllUsers')) {
+                $InputObject.Properties.DeleteAllUsers = $DeleteAllUsers
+            }
+            if ($PSBoundParameters.ContainsKey('DeleteAllGroups')) {
+                $InputObject.Properties.DeleteAllGroups = $DeleteAllGroups
+            }
+            if ($PSBoundParameters.ContainsKey('Members')) {
+                $InputObject.Properties.Members = $Members
+            }
+            if ($PSBoundParameters.ContainsKey('Description')) {
+            }
 
-        # Items with the Delete action, should not have all these properties (GUI sets it this way)
-        if ($InputObject.Properties.Action -eq [GPPItemAction]::D) {
+            # The NewName property applicable to the Update action only
+            if ($InputObject.Properties.Action -eq [GPPItemAction]::C -and $InputObject.Properties.NewName) {
+                $InputObject.Properties.NewName = $null
+            }
+        }
+        else {
+            # Items with the Delete action, should not have all these properties (GUI sets it this way)
+
             $InputObject.Properties.NewName = $null
             $InputObject.Properties.Description = $null
             $InputObject.Properties.DeleteAllUsers = $null
@@ -152,22 +173,24 @@ function Set-GPPGroup {
             $InputObject.Properties.Members = $null
         }
 
-        $InputObject.disabled = $Disable
+        if ($PSBoundParameters.ContainsKey('Disable')) {
+            $InputObject.disabled = $Disable
+        }
 
         $InputObject.image = $InputObject.Properties.action.value__ # Fixes up the item's icon in case we changed its action
 
-        $NewGroupsSection = Remove-GPPGroup -GPPSection $GroupsSection -UID $InputObject.uid
+        $NewGPPSection = Remove-GPPGroup -GPPSection $GPPSection -UID $InputObject.uid
 
-        if ($NewGroupsSection) {
-            $NewGroupsSection.Members.Add($InputObject)
+        if ($NewGPPSection) {
+            $NewGPPSection.Members.Add($InputObject)
         }
         else {
-            $NewGroupsSection = [GPPSectionGroups]::new($InputObject, $false)
+            $NewGPPSection = [GPPSectionGroups]::new($InputObject, $false)
         }
 
         if ($PassThru) {
             $InputObject
         }
-        Set-GPPSection -InputObject $NewGroupsSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
+        Set-GPPSection -InputObject $NewGPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
     }
 }

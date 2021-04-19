@@ -1,9 +1,9 @@
-function Add-GPPGroup {
+function Add-GPPUser {
     [OutputType([System.Void])]
     Param (
         [Parameter(ParameterSetName = 'ByName', Mandatory)]
         [Parameter(ParameterSetName = 'ById', Mandatory)]
-        [GPPItemGroup]$InputObject,
+        [GPPItemUser]$InputObject,
         [Parameter(ParameterSetName = 'ByName', Mandatory)]
         [string]$GPOName,
         [Parameter(ParameterSetName = 'ById', Mandatory)]
