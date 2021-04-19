@@ -56,7 +56,7 @@ function Get-GPPUser {
         $FilterScript = if ($UID) {
             { $_.uid -eq $UID }
         }
-        elseif ($BuiltInUser) {
+        elseif ($PSBoundParameters.ContainsKey('BuiltInUser')) {
             $BuiltInUserInternal = [GPPItemUserSubAuthority]$BuiltInUser.value__
             { $_.Properties.subAuthority -eq $BuiltInUserInternal }
         }
@@ -74,6 +74,7 @@ function Get-GPPUser {
                 { $_.Properties.userName -like $FilterName }
             }
         }
+
+        $Users | Where-Object -FilterScript $FilterScript
     }
-    $Users | Where-Object -FilterScript $FilterScript
 }
