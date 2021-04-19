@@ -73,6 +73,7 @@ function Get-GPPGroup {
                 { $_.Properties.groupName -like $FilterName }
             }
         }
+
+        $Groups | Where-Object -FilterScript $FilterScript
     }
-    $Groups | Where-Object -FilterScript $FilterScript
 }
