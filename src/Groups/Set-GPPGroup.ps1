@@ -76,7 +76,7 @@ function Set-GPPGroup {
         [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
         [Parameter(ParameterSetName = 'ByGPONameItemSID')]
         [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
-        [switch]$DeleteAllItems,
+        [switch]$DeleteAllGroups,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
         [Parameter(ParameterSetName = 'ByGPONameItemName')]
