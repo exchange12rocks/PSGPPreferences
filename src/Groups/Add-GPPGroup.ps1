@@ -13,5 +13,5 @@ function Add-GPPGroup {
         [GPPContext]$Context = $ModuleWideDefaultGPPContext
     )
 
-    Add-GPPGroupsItem @PSBoundParameters -Context $Context
+    Add-GPPGroupsItem @PSBoundParameters
 }
