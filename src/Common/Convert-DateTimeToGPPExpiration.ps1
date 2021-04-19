@@ -1,6 +1,7 @@
 function Convert-DateTimeToGPPExpirationDate {
     [OutputType('string')]
     Param (
+        [Parameter(Mandatory)]
         [datetime]$DateTime
     )
 
