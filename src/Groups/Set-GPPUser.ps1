@@ -40,7 +40,7 @@ function Set-GPPUser {
         [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
         [Parameter(ParameterSetName = 'ByGPONameItemBuiltInUser')]
         [Parameter(ParameterSetName = 'ByGPOIdItemBuiltInUser')]
-        [GPPItemGroupsUserActionDisplay]$Action,
+        [GPPItemUserActionDisplay]$Action,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
         [Parameter(ParameterSetName = 'ByGPONameItemName')]
