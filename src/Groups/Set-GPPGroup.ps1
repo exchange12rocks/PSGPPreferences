@@ -94,7 +94,7 @@ function Set-GPPGroup {
         [Parameter(ParameterSetName = 'ByGPOIdItemLiteralName')]
         [Parameter(ParameterSetName = 'ByGPONameItemSID')]
         [Parameter(ParameterSetName = 'ByGPOIdItemSID')]
-        [GPPItemItemMember[]]$Members,
+        [GPPItemGroupMember[]]$Members,
         [Parameter(ParameterSetName = 'ByGPONameObject')]
         [Parameter(ParameterSetName = 'ByGPOIdObject')]
         [Parameter(ParameterSetName = 'ByGPONameItemName')]
