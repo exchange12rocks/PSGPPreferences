@@ -263,7 +263,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-Specifies the new name of a group if you want to rename it on target hosts.
+Specifies a new name for a group if you want to rename it on target hosts.
 
 ```yaml
 Type: String
