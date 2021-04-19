@@ -139,20 +139,6 @@ function Set-GPPUser {
     $GPPSection = Get-GPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
 
     if ($GPPSection) {
-        $InternalAction = if ($PSBoundParameters.ContainsKey('Action')) {
-            switch ($Action) {
-                ([GPPItemUserActionDisplay]::Update) {
-                    [GPPItemAction]::U
-                }
-                ([GPPItemUserActionDisplay]::Delete) {
-                    [GPPItemAction]::D
-                }
-            }
-        }
-        else {
-            [GPPItemAction]::U
-        }
-
         if (-not $InputObject) {
             $GetFunctionParameters = @{}
 
@@ -170,7 +156,14 @@ function Set-GPPUser {
         }
 
         if ($PSBoundParameters.ContainsKey('Action')) {
-            $InputObject.Properties.Action = $InternalAction
+            $InputObject.Properties.Action = switch ($Action) {
+                ([GPPItemUserActionDisplay]::Update) {
+                    [GPPItemAction]::U
+                }
+                ([GPPItemUserActionDisplay]::Delete) {
+                    [GPPItemAction]::D
+                }
+            }
         }
 
         if ($InputObject.Properties.Action -ne [GPPItemAction]::D) {
