@@ -3,7 +3,7 @@ function Add-GPPUser {
     Param (
         [Parameter(ParameterSetName = 'ByName', Mandatory)]
         [Parameter(ParameterSetName = 'ById', Mandatory)]
-        [GPPItemGroup]$InputObject,
+        [GPPItemUser]$InputObject,
         [Parameter(ParameterSetName = 'ByName', Mandatory)]
         [string]$GPOName,
         [Parameter(ParameterSetName = 'ById', Mandatory)]
@@ -13,5 +13,5 @@ function Add-GPPUser {
         [GPPContext]$Context = $ModuleWideDefaultGPPContext
     )
 
-    Add-GPPGroupsItem @PSBoundParameters -Context $Context
+    Add-GPPGroupsItem @PSBoundParameters
 }
