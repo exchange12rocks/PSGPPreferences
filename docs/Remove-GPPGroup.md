@@ -12,47 +12,62 @@ Removes a group definition from a GPO object.
 
 ## SYNTAX
 
-### ByGPPSectionGroupName
+### ByGPPSectionObjectName
 ```
 Remove-GPPGroup -Name <String> -GPPSection <GPPSection> [<CommonParameters>]
 ```
 
-### ByGPOIdGroupName
+### ByGPOIdObjectName
 ```
 Remove-GPPGroup -Name <String> -GPOId <Guid> [-Context <GPPContext>] [<CommonParameters>]
 ```
 
-### ByGPONameGroupName
+### ByGPONameObjectName
 ```
 Remove-GPPGroup -Name <String> -GPOName <String> [-Context <GPPContext>] [<CommonParameters>]
 ```
 
-### ByGPPSectionGroupSID
+### ByGPPSectionObjectLiteralName
+```
+Remove-GPPGroup -LiteralName <String> -GPPSection <GPPSection> [<CommonParameters>]
+```
+
+### ByGPOIdObjectLiteralName
+```
+Remove-GPPGroup -LiteralName <String> -GPOId <Guid> [-Context <GPPContext>] [<CommonParameters>]
+```
+
+### ByGPONameObjectLiteralName
+```
+Remove-GPPGroup -LiteralName <String> -GPOName <String> [-Context <GPPContext>] [<CommonParameters>]
+```
+
+### ByGPPSectionObjectSID
 ```
 Remove-GPPGroup -SID <SecurityIdentifier> -GPPSection <GPPSection> [<CommonParameters>]
 ```
 
-### ByGPOIdGroupSID
+### ByGPOIdObjectSID
 ```
 Remove-GPPGroup -SID <SecurityIdentifier> -GPOId <Guid> [-Context <GPPContext>] [<CommonParameters>]
 ```
 
-### ByGPONameGroupSID
+### ByGPONameObjectSID
 ```
 Remove-GPPGroup -SID <SecurityIdentifier> -GPOName <String> [-Context <GPPContext>] [<CommonParameters>]
 ```
 
-### ByGPPSectionGroupUID
+### ByGPPSectionObjectUID
 ```
 Remove-GPPGroup -UID <Guid> -GPPSection <GPPSection> [<CommonParameters>]
 ```
 
-### ByGPOIdGroupUID
+### ByGPOIdObjectUID
 ```
 Remove-GPPGroup -UID <Guid> -GPOId <Guid> [-Context <GPPContext>] [<CommonParameters>]
 ```
 
-### ByGPONameGroupUID
+### ByGPONameObjectUID
 ```
 Remove-GPPGroup -UID <Guid> -GPOName <String> [-Context <GPPContext>] [<CommonParameters>]
 ```
@@ -67,15 +82,7 @@ Removes a group definition from a GPO object.
 PS C:\> Remove-GPPGroup -Name 'TEST-*' -GPOName 'Custom Group Policy'
 ```
 
-Removes all groups named "TEST-*" from the "Custom Group Policy" GPO. The -Name parameter does not support wildcards.
-
-### Example 2
-```powershell
-PS C:\> $Groups = Get-GPPGroup -Name 'TEST-*' -GPOName 'Custom Group Policy'
-PS C:\> $Groups | % { Remove-GPPGroup -UID $_.uid -GPOName 'Custom Group Policy' }
-```
-
-Removes all groups which name starts with "TEST-" from the "Custom Group Policy" GPO.
+Removes all group definitions where group names start with "TEST-*" from the "Custom Group Policy" GPO.
 
 ## PARAMETERS
 
@@ -84,7 +91,7 @@ Specifies which Group Policy context to use: Machine or User. Doesn't do anythin
 
 ```yaml
 Type: GPPContext
-Parameter Sets: ByGPOIdGroupName, ByGPONameGroupName, ByGPOIdGroupSID, ByGPONameGroupSID, ByGPOIdGroupUID, ByGPONameGroupUID
+Parameter Sets: ByGPOIdObjectName, ByGPONameObjectName, ByGPOIdObjectLiteralName, ByGPONameObjectLiteralName, ByGPOIdObjectSID, ByGPONameObjectSID, ByGPOIdObjectUID, ByGPONameObjectUID
 Aliases:
 Accepted values: Machine
 
@@ -100,7 +107,7 @@ Specifies the ID of a GPO in which you want to search for groups. It is a name o
 
 ```yaml
 Type: Guid
-Parameter Sets: ByGPOIdGroupName, ByGPOIdGroupSID, ByGPOIdGroupUID
+Parameter Sets: ByGPOIdObjectName, ByGPOIdObjectLiteralName, ByGPOIdObjectSID, ByGPOIdObjectUID
 Aliases:
 
 Required: True
@@ -115,7 +122,7 @@ Specifies the name of a GPO in which you want to search for groups.
 
 ```yaml
 Type: String
-Parameter Sets: ByGPONameGroupName, ByGPONameGroupSID, ByGPONameGroupUID
+Parameter Sets: ByGPONameObjectName, ByGPONameObjectLiteralName, ByGPONameObjectSID, ByGPONameObjectUID
 Aliases:
 
 Required: True
@@ -126,11 +133,11 @@ Accept wildcard characters: False
 ```
 
 ### -GPPSection
-You can use this parameter to easily remove group objects from a GPPSection object which you already have in memory, but that parameter is here mostly for intra-module calls.
+You can use this parameter to easily remove group definition objects from a GPPSection object which you already have in memory, but that parameter is here mostly for intra-module calls.
 
 ```yaml
 Type: GPPSection
-Parameter Sets: ByGPPSectionGroupName, ByGPPSectionGroupSID, ByGPPSectionGroupUID
+Parameter Sets: ByGPPSectionObjectName, ByGPPSectionObjectLiteralName, ByGPPSectionObjectSID, ByGPPSectionObjectUID
 Aliases:
 
 Required: True
@@ -145,14 +152,14 @@ Specifies the name of a group you want to remove from a GPO.
 
 ```yaml
 Type: String
-Parameter Sets: ByGPPSectionGroupName, ByGPOIdGroupName, ByGPONameGroupName
+Parameter Sets: ByGPPSectionObjectName, ByGPOIdObjectName, ByGPONameObjectName
 Aliases:
 
 Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -SID
@@ -160,7 +167,7 @@ Specifies the SID of a group you want to remove from a GPO.
 
 ```yaml
 Type: SecurityIdentifier
-Parameter Sets: ByGPPSectionGroupSID, ByGPOIdGroupSID, ByGPONameGroupSID
+Parameter Sets: ByGPPSectionObjectSID, ByGPOIdObjectSID, ByGPONameObjectSID
 Aliases:
 
 Required: True
@@ -171,11 +178,26 @@ Accept wildcard characters: False
 ```
 
 ### -UID
-Specifies the UID of a group you want to remove from a GPO. A UID is a unique identifier of an object in GPP. You can have several groups with the same Name/SID combination in the same Group Policy object - those groups will have different UIDs. You may get a UID of a group by looking at its "uid" property.
+Specifies the UID of a group definition you want to remove from a GPO. A UID is a unique identifier of an object in GPP. You can have several groups with the same Name/SID combination in the same Group Policy object - those group definitions will have different UIDs. You may get a UID of a group by looking at its "uid" property.
 
 ```yaml
 Type: Guid
-Parameter Sets: ByGPPSectionGroupUID, ByGPOIdGroupUID, ByGPONameGroupUID
+Parameter Sets: ByGPPSectionObjectUID, ByGPOIdObjectUID, ByGPONameObjectUID
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LiteralName
+Specifies the name of a group you want to remove from a GPO. Does NOT support wildcards.
+
+```yaml
+Type: String
+Parameter Sets: ByGPPSectionObjectLiteralName, ByGPOIdObjectLiteralName, ByGPONameObjectLiteralName
 Aliases:
 
 Required: True

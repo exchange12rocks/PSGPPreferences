@@ -23,8 +23,8 @@ Add-GPPGroup -InputObject <GPPItemGroup> -GPOName <String> [-Context <GPPContext
 ```
 
 ## DESCRIPTION
-Use this function to add a group into a Group Policy Object. First you have to create a new group object using New-GPPGroup.
-This function is useful if you want to add the same group object into several Group Policy objects. If you just want to create a single group and add it into a GPO immediately, you can just use the -GPOName/GPOId parameter at New-GPPGroup.
+Use this function to add a group into a Group Policy Object. First you have to create a new group definition object using New-GPPGroup.
+This function is useful if you want to add the same group definition into several Group Policy objects. If you just want to create a single group and add it into a GPO immediately, you can just use the -GPOName/GPOId parameter at New-GPPGroup.
 
 ## EXAMPLES
 
@@ -40,7 +40,7 @@ Adds a group object $GroupObject into a Group Policy named TEST.
 PS C:\> Add-GPPGroup -InputObject $GroupObject -GPOId '31B2F340-016D-11D2-945F-00C04FB984F9'
 ```
 
-Adds a group object $GroupObject into a Group Policy by using its ID (see the description for the -GPOId parameter below).
+Adds a group definition object $GroupObject into a Group Policy by using its ID (see the description for the -GPOId parameter below).
 
 ## PARAMETERS
 
@@ -91,7 +91,7 @@ Accept wildcard characters: False
 ```
 
 ### -InputObject
-Specifies an object of a group which you want to add into a GPO. You can create one with New-GPPGroup.
+Specifies an object of a group definition which you want to add into a GPO. You can create one with New-GPPGroup.
 
 ```yaml
 Type: GPPItemGroup

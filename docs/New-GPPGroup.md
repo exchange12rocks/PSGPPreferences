@@ -165,8 +165,7 @@ New-GPPGroup -SID <SecurityIdentifier> [-Create] [-Description <String>] [-Delet
 ## DESCRIPTION
 Creates a new Group Policy Preferences group definition. You can either save it in the memory for additional processing or immediately put into a GPO by using the -GPOName or -GPOId parameters.
 
-Note that available parameters depend on the action you choose: -Create, -Replace, -Update, or -Delete.
-This mimics the GUI behavior.
+Note that available parameters depend on the action you choose: -Create, -Replace, -Update, or -Delete. This mimics the GUI behavior.
 
 ## EXAMPLES
 
@@ -183,7 +182,7 @@ Creates a new group definition for a group called "TEST-1" with its action set t
 PS C:\> New-GPPGroup -Name 'TEST-1' -GPOId '70f86590-588a-4659-8880-3d2374604811' -Delete
 ```
 
-Creates a new group definition for a group called "TEST-1" with its action set to "Delete", and saved it in a GPO with ID 70f86590-588a-4659-8880-3d2374604811.
+Creates a new group definition for a group called "TEST-1" with its action set to "Delete", and saves it in a GPO with ID 70f86590-588a-4659-8880-3d2374604811.
 
 ### Example 3
 ```powershell
@@ -309,7 +308,7 @@ Accept wildcard characters: False
 ```
 
 ### -GPOId
-Specifies the ID of a GPO into which you want to add the newly created group item. It is a name of a Group Policy's object in Active Directory. Look into a CN=Policies,CN=System container in your AD DS domain.
+Specifies the ID of a GPO into which you want to add the newly created group definition. It is a name of a Group Policy's object in Active Directory. Look into a CN=Policies,CN=System container in your AD DS domain.
 
 ```yaml
 Type: Guid
@@ -324,7 +323,7 @@ Accept wildcard characters: False
 ```
 
 ### -GPOName
-Specifies the name of a GPO into which you want to add the newly created group item.
+Specifies the name of a GPO into which you want to add the newly created group definition.
 
 ```yaml
 Type: String
@@ -354,7 +353,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the group.
+Specifies the name of a group.
 
 ```yaml
 Type: String
@@ -369,7 +368,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-Specifies the new name of the group if you want to rename it on target hosts.
+Specifies the new name of a group if you want to rename it on target hosts.
 
 ```yaml
 Type: String
@@ -384,7 +383,7 @@ Accept wildcard characters: False
 ```
 
 ### -PassThru
-Returns a new group object to the pipeline.
+Returns a new group definition object to the pipeline.
 
 ```yaml
 Type: SwitchParameter
@@ -414,7 +413,7 @@ Accept wildcard characters: False
 ```
 
 ### -SID
-Specifies the SID of the group.
+Specifies the SID of a group.
 
 ```yaml
 Type: SecurityIdentifier

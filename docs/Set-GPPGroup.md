@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-GPPGroup
 
 ## SYNOPSIS
-Sets properties of a GPP group object in a specified Group Policy object.
+Sets properties of a group definition in a specified Group Policy object.
 
 ## SYNTAX
 
@@ -55,8 +55,8 @@ Set-GPPGroup -SID <SecurityIdentifier> -GPOName <String> [-Context <GPPContext>]
 ```
 
 ## DESCRIPTION
-Sets properties of a GPP group object in a specified Group Policy object. You may also use it to write a GPP group object from memory into a GPO and changing some of its properties in the process.
-If you want just to add a group into a GPO, w/o any modifications, I suggest you to use Add-GPPGroup.
+Sets properties of a group definition in a specified Group Policy object. You may also use it to write a group definition object from memory into a GPO and changing some of its properties in the process.
+If you want just to add a group definition into a GPO, w/o any modifications, I suggest you to use Add-GPPGroup.
 
 ## EXAMPLES
 
@@ -173,7 +173,7 @@ Accept wildcard characters: False
 ```
 
 ### -Disable
-Disables processing of this group object. In the GUI you'll see it greyed out.
+Disables processing of this group definition. In the GUI you'll see it greyed out.
 
 ```yaml
 Type: SwitchParameter
@@ -218,7 +218,7 @@ Accept wildcard characters: False
 ```
 
 ### -InputObject
-If you already have a GPP group object in memory, which you want to write into a Group Policy, you can pass in into this parameter.
+If you already have a group definition object in memory, which you want to write into a Group Policy, you can pass in into this parameter.
 
 ```yaml
 Type: GPPItemGroup
@@ -248,7 +248,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of a group which you want to change.
+Specifies the name of a group which you want to change. Supports wildcards.
 
 ```yaml
 Type: String
@@ -259,7 +259,7 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -NewName
@@ -278,7 +278,7 @@ Accept wildcard characters: False
 ```
 
 ### -PassThru
-Returns a new group object to the pipeline.
+Returns a new group definition object to the pipeline.
 
 ```yaml
 Type: SwitchParameter
