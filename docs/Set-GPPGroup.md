@@ -26,28 +26,42 @@ Set-GPPGroup -InputObject <GPPItemGroup> -GPOName <String> [-Context <GPPContext
  [-DeleteAllGroups] [-Disable] [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
-### ByGPOIdGroupName
+### ByGPOIdItemName
 ```
 Set-GPPGroup -Name <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
  [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
  [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
-### ByGPONameGroupName
+### ByGPONameItemName
 ```
 Set-GPPGroup -Name <String> -GPOName <String> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
  [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
  [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
-### ByGPOIdGroupSID
+### ByGPOIdItemLiteralName
+```
+Set-GPPGroup -LiteralName <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
+ [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
+ [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPONameItemLiteralName
+```
+Set-GPPGroup -LiteralName <String> -GPOName <String> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
+ [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
+ [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPOIdItemSID
 ```
 Set-GPPGroup -SID <SecurityIdentifier> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
  [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
  [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
-### ByGPONameGroupSID
+### ByGPONameItemSID
 ```
 Set-GPPGroup -SID <SecurityIdentifier> -GPOName <String> [-Context <GPPContext>]
  [-Action <GPPItemActionDisplay>] [-NewName <String>] [-Description <String>] [-DeleteAllUsers]
@@ -192,7 +206,7 @@ Specifies the ID of a GPO in which you want to search for groups. It is a name o
 
 ```yaml
 Type: Guid
-Parameter Sets: ByGPOIdObject, ByGPOIdGroupName, ByGPOIdGroupSID
+Parameter Sets: ByGPOIdObject, ByGPOIdItemName, ByGPOIdItemLiteralName, ByGPOIdItemSID
 Aliases:
 
 Required: True
@@ -207,7 +221,7 @@ Specifies the name of a GPO in which you want to search for groups.
 
 ```yaml
 Type: String
-Parameter Sets: ByGPONameObject, ByGPONameGroupName, ByGPONameGroupSID
+Parameter Sets: ByGPONameObject, ByGPONameItemName, ByGPONameItemLiteralName, ByGPONameItemSID
 Aliases:
 
 Required: True
@@ -252,7 +266,7 @@ Specifies the name of a group which you want to change. Supports wildcards.
 
 ```yaml
 Type: String
-Parameter Sets: ByGPOIdGroupName, ByGPONameGroupName
+Parameter Sets: ByGPOIdItemName, ByGPONameItemName
 Aliases:
 
 Required: True
@@ -297,7 +311,22 @@ Specifies the SID of a group which you want to change.
 
 ```yaml
 Type: SecurityIdentifier
-Parameter Sets: ByGPOIdGroupSID, ByGPONameGroupSID
+Parameter Sets: ByGPOIdItemSID, ByGPONameItemSID
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LiteralName
+Specifies the name of a group which you want to change. Does not support wildcards.
+
+```yaml
+Type: String
+Parameter Sets: ByGPOIdItemLiteralName, ByGPONameItemLiteralName
 Aliases:
 
 Required: True
