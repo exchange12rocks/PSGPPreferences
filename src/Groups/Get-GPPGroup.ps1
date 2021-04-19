@@ -17,7 +17,7 @@ function Get-GPPGroup {
         [Parameter(ParameterSetName = 'ByGPOIdObjectUID', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPPSectionObjectUID', Mandatory)]
         [guid]$UID,
-        [Parameter(ParameterSetName = 'ByGPONameObjectpName', Mandatory)]
+        [Parameter(ParameterSetName = 'ByGPONameObjectName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameObjectLiteralName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameObjectSID', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameObjectUID', Mandatory)]
