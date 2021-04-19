@@ -85,6 +85,9 @@ function Deserialize-GPPSectionGroups {
                 if ($GPPItemPropertiesElement.subAuthority) {
                     [GPPItemUserSubAuthority]$BuiltInUser = $GPPItemPropertiesElement.subAuthority
                 }
+                else {
+                    $BuiltInUser = $null
+                }
 
                 $GPPItemPropertiesUser = if ($UserMustChangePassword) {
                     [GPPItemPropertiesUser]::new($GPPItemPropertiesElement.action, $BuiltInUser, $GPPItemPropertiesElement.userName, $GPPItemPropertiesElement.newName, $GPPItemPropertiesElement.fullName, $GPPItemPropertiesElement.description, $UserMustChangePassword, $AccountDisabled, $GPPItemPropertiesElement.expires)
