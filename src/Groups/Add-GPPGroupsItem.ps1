@@ -3,7 +3,7 @@ function Add-GPPGroupsItem {
     Param (
         [Parameter(ParameterSetName = 'ByName', Mandatory)]
         [Parameter(ParameterSetName = 'ById', Mandatory)]
-        [GPPItemGroup]$InputObject,
+        [GPPItemGroupsSection]$InputObject,
         [Parameter(ParameterSetName = 'ByName', Mandatory)]
         [string]$GPOName,
         [Parameter(ParameterSetName = 'ById', Mandatory)]
