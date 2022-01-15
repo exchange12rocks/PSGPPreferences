@@ -300,7 +300,6 @@ function Set-GPPUser {
                 $InputObject.Properties.neverExpires = $null
                 $InputObject.Properties.acctDisabled = $null
                 $InputObject.Properties.subAuthority = $null
-                $InputObject.Properties.userName = $null
                 $InputObject.Properties.expires = $null
             }
 
