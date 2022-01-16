@@ -1,13 +1,13 @@
 BeforeDiscovery {
     $ScriptDirectoryPath = $PSScriptRoot
     $DataSourcePath = Join-Path -Path $ScriptDirectoryPath -ChildPath 'Data\Groups'
-    $Set1Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupsOnly-Set-1.xml'
+    $Set1Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupOnly-Set-1.xml'
     [xml]$Set1Data = Get-Content -Path $Set1Path
-    $Set2Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupsOnly-Set-2.xml'
+    $Set2Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupOnly-Set-2.xml'
     [xml]$Set2Data = Get-Content -Path $Set2Path
-    $ModuleRootPath = Join-Path -Path $ScriptDirectoryPath -ChildPath ..\
+    $ModuleRootPath = Join-Path -Path $ScriptDirectoryPath -ChildPath ..\src\
     Import-Module -Name (Join-Path -Path $ModuleRootPath -ChildPath 'PSGPPreferences.psd1') -Force
-    . (Join-Path -Path $ModuleRootPath -ChildPath 'src\Definitions\Classes.ps1')
+    . (Join-Path -Path $ModuleRootPath -ChildPath 'Definitions\Classes.ps1')
 }
 
 Describe 'Internal functions' {
