@@ -12,13 +12,28 @@ Sets properties of a user definition in a specified Group Policy object.
 
 ## SYNTAX
 
+### ByGPOIdObjectUserMustChangePassword
+```
+Set-GPPUser -InputObject <GPPItemUser> -GPOId <Guid> [-Context <GPPContext>]
+ [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
+ [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>]
+ [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPONameObjectUserMustChangePassword
+```
+Set-GPPUser -InputObject <GPPItemUser> -GPOName <String> [-Context <GPPContext>]
+ [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
+ [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>]
+ [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+```
+
 ### ByGPOIdObject
 ```
 Set-GPPUser -InputObject <GPPItemUser> -GPOId <Guid> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>]
- [-UserMayNotChangePassword <Boolean>] [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru]
- [<CommonParameters>]
+ [-UserMayNotChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
 ```
 
 ### ByGPONameObject
@@ -26,7 +41,22 @@ Set-GPPUser -InputObject <GPPItemUser> -GPOId <Guid> [-Context <GPPContext>]
 Set-GPPUser -InputObject <GPPItemUser> -GPOName <String> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>]
- [-UserMayNotChangePassword <Boolean>] [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru]
+ [-UserMayNotChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPOIdItemNameUserMustChangePassword
+```
+Set-GPPUser -Name <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemUserActionDisplay>]
+ [-NewName <String>] [-FullName <String>] [-Description <String>] [-AccountDisabled <Boolean>]
+ [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru]
+ [<CommonParameters>]
+```
+
+### ByGPONameItemNameUserMustChangePassword
+```
+Set-GPPUser -Name <String> -GPOName <String> [-Context <GPPContext>] [-Action <GPPItemUserActionDisplay>]
+ [-NewName <String>] [-FullName <String>] [-Description <String>] [-AccountDisabled <Boolean>]
+ [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru]
  [<CommonParameters>]
 ```
 
@@ -35,7 +65,7 @@ Set-GPPUser -InputObject <GPPItemUser> -GPOName <String> [-Context <GPPContext>]
 Set-GPPUser -Name <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemUserActionDisplay>]
  [-NewName <String>] [-FullName <String>] [-Description <String>] [-AccountDisabled <Boolean>]
  [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>] [-UserMayNotChangePassword <Boolean>]
- [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+ [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
 ```
 
 ### ByGPONameItemName
@@ -43,7 +73,23 @@ Set-GPPUser -Name <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPIt
 Set-GPPUser -Name <String> -GPOName <String> [-Context <GPPContext>] [-Action <GPPItemUserActionDisplay>]
  [-NewName <String>] [-FullName <String>] [-Description <String>] [-AccountDisabled <Boolean>]
  [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>] [-UserMayNotChangePassword <Boolean>]
- [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+ [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPOIdItemLiteralNameUserMustChangePassword
+```
+Set-GPPUser -LiteralName <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemUserActionDisplay>]
+ [-NewName <String>] [-FullName <String>] [-Description <String>] [-AccountDisabled <Boolean>]
+ [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru]
+ [<CommonParameters>]
+```
+
+### ByGPONameItemLiteralNameUserMustChangePassword
+```
+Set-GPPUser -LiteralName <String> -GPOName <String> [-Context <GPPContext>]
+ [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
+ [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>]
+ [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
 ```
 
 ### ByGPOIdItemLiteralName
@@ -51,7 +97,7 @@ Set-GPPUser -Name <String> -GPOName <String> [-Context <GPPContext>] [-Action <G
 Set-GPPUser -LiteralName <String> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemUserActionDisplay>]
  [-NewName <String>] [-FullName <String>] [-Description <String>] [-AccountDisabled <Boolean>]
  [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>] [-UserMayNotChangePassword <Boolean>]
- [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+ [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
 ```
 
 ### ByGPONameItemLiteralName
@@ -59,8 +105,23 @@ Set-GPPUser -LiteralName <String> -GPOId <Guid> [-Context <GPPContext>] [-Action
 Set-GPPUser -LiteralName <String> -GPOName <String> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>]
- [-UserMayNotChangePassword <Boolean>] [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru]
- [<CommonParameters>]
+ [-UserMayNotChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPOIdItemBuiltInUserUserMustChangePassword
+```
+Set-GPPUser -BuiltInUser <GPPItemUserSubAuthorityDisplay> -GPOId <Guid> [-Context <GPPContext>]
+ [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
+ [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>]
+ [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
+```
+
+### ByGPONameItemBuiltInUserUserMustChangePassword
+```
+Set-GPPUser -BuiltInUser <GPPItemUserSubAuthorityDisplay> -GPOName <String> [-Context <GPPContext>]
+ [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
+ [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>]
+ [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
 ```
 
 ### ByGPOIdItemBuiltInUser
@@ -68,8 +129,7 @@ Set-GPPUser -LiteralName <String> -GPOName <String> [-Context <GPPContext>]
 Set-GPPUser -BuiltInUser <GPPItemUserSubAuthorityDisplay> -GPOId <Guid> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>]
- [-UserMayNotChangePassword <Boolean>] [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru]
- [<CommonParameters>]
+ [-UserMayNotChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
 ```
 
 ### ByGPONameItemBuiltInUser
@@ -77,8 +137,7 @@ Set-GPPUser -BuiltInUser <GPPItemUserSubAuthorityDisplay> -GPOId <Guid> [-Contex
 Set-GPPUser -BuiltInUser <GPPItemUserSubAuthorityDisplay> -GPOName <String> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>]
- [-UserMayNotChangePassword <Boolean>] [-UserMustChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru]
- [<CommonParameters>]
+ [-UserMayNotChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -166,7 +225,7 @@ Allows you to target your user definition to a system built-in user, instead of 
 
 ```yaml
 Type: GPPItemUserSubAuthorityDisplay
-Parameter Sets: ByGPOIdItemBuiltInUser, ByGPONameItemBuiltInUser
+Parameter Sets: ByGPOIdItemBuiltInUserUserMustChangePassword, ByGPONameItemBuiltInUserUserMustChangePassword, ByGPOIdItemBuiltInUser, ByGPONameItemBuiltInUser
 Aliases:
 Accepted values: Administrator, Guest
 
@@ -243,7 +302,7 @@ Specifies the ID of a GPO in which you want to search for users. It is a name of
 
 ```yaml
 Type: Guid
-Parameter Sets: ByGPOIdObject, ByGPOIdItemName, ByGPOIdItemLiteralName, ByGPOIdItemBuiltInUser
+Parameter Sets: ByGPOIdObjectUserMustChangePassword, ByGPOIdObject, ByGPOIdItemNameUserMustChangePassword, ByGPOIdItemName, ByGPOIdItemLiteralNameUserMustChangePassword, ByGPOIdItemLiteralName, ByGPOIdItemBuiltInUserUserMustChangePassword, ByGPOIdItemBuiltInUser
 Aliases:
 
 Required: True
@@ -258,7 +317,7 @@ Specifies the name of a GPO in which you want to search for users.
 
 ```yaml
 Type: String
-Parameter Sets: ByGPONameObject, ByGPONameItemName, ByGPONameItemLiteralName, ByGPONameItemBuiltInUser
+Parameter Sets: ByGPONameObjectUserMustChangePassword, ByGPONameObject, ByGPONameItemNameUserMustChangePassword, ByGPONameItemName, ByGPONameItemLiteralNameUserMustChangePassword, ByGPONameItemLiteralName, ByGPONameItemBuiltInUserUserMustChangePassword, ByGPONameItemBuiltInUser
 Aliases:
 
 Required: True
@@ -273,7 +332,7 @@ If you already have a user definition object in memory, which you want to write 
 
 ```yaml
 Type: GPPItemUser
-Parameter Sets: ByGPOIdObject, ByGPONameObject
+Parameter Sets: ByGPOIdObjectUserMustChangePassword, ByGPONameObjectUserMustChangePassword, ByGPOIdObject, ByGPONameObject
 Aliases:
 
 Required: True
@@ -288,7 +347,7 @@ Specifies the name of a user which you want to change. Does not support wildcard
 
 ```yaml
 Type: String
-Parameter Sets: ByGPOIdItemLiteralName, ByGPONameItemLiteralName
+Parameter Sets: ByGPOIdItemLiteralNameUserMustChangePassword, ByGPONameItemLiteralNameUserMustChangePassword, ByGPOIdItemLiteralName, ByGPONameItemLiteralName
 Aliases:
 
 Required: True
@@ -303,7 +362,7 @@ Specifies the name of a user which you want to change. Supports wildcards.
 
 ```yaml
 Type: String
-Parameter Sets: ByGPOIdItemName, ByGPONameItemName
+Parameter Sets: ByGPOIdItemNameUserMustChangePassword, ByGPONameItemNameUserMustChangePassword, ByGPOIdItemName, ByGPONameItemName
 Aliases:
 
 Required: True
@@ -348,7 +407,7 @@ Speficies that the password of the target account should not expire.
 
 ```yaml
 Type: Boolean
-Parameter Sets: (All)
+Parameter Sets: ByGPOIdObject, ByGPONameObject, ByGPOIdItemName, ByGPONameItemName, ByGPOIdItemLiteralName, ByGPONameItemLiteralName, ByGPOIdItemBuiltInUser, ByGPONameItemBuiltInUser
 Aliases:
 
 Required: False
@@ -363,7 +422,7 @@ Specifies that the target account should not be able to change its password by i
 
 ```yaml
 Type: Boolean
-Parameter Sets: (All)
+Parameter Sets: ByGPOIdObject, ByGPONameObject, ByGPOIdItemName, ByGPONameItemName, ByGPOIdItemLiteralName, ByGPONameItemLiteralName, ByGPOIdItemBuiltInUser, ByGPONameItemBuiltInUser
 Aliases:
 
 Required: False
@@ -378,7 +437,7 @@ Specifies that the target account must change its password at the next logon.
 
 ```yaml
 Type: Boolean
-Parameter Sets: (All)
+Parameter Sets: ByGPOIdObjectUserMustChangePassword, ByGPONameObjectUserMustChangePassword, ByGPOIdItemNameUserMustChangePassword, ByGPONameItemNameUserMustChangePassword, ByGPOIdItemLiteralNameUserMustChangePassword, ByGPONameItemLiteralNameUserMustChangePassword, ByGPOIdItemBuiltInUserUserMustChangePassword, ByGPONameItemBuiltInUserUserMustChangePassword
 Aliases:
 
 Required: False
