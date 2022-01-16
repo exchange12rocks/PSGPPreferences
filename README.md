@@ -18,30 +18,34 @@ Your help is welcome and appreciated.
 
 `Install-Module PSGPPreferences`
 
-## What does already work
+## What already works
 
-* The "Local Users and Groups" section, partially - Groups only:
-  * You can create new groups and members (`New-GPPGroup`, `New-GPPGroupMember`),
+* The "Local Users and Groups" section:
+  * You can create new groups and their members (`New-GPPGroup`, `New-GPPGroupMember`),
   * retrieve groups and their members (`Get-GPPGroup`, `Get-GPPGroupMember`),
   * remove existing groups (`Remove-GPPGroup`),
   * add/remove members to/from groups (`Add-GPPGroupMember`, `Remove-GPPGroupMember`),
   * set group and member properties (`Set-GPPGroup`, `Set-GPPGroupMember`).
+  * create new users (`New-GPPUser`),
+  * retrieve users (`Get-GPPUser`),
+  * remove existing users (`Remove-GPPUser`),
+  * set user properties (`Set-GPPUser`).
 
 ## What does not work, yet
 
 * Other GPP sections
 * Filters
 * User context. Only the Machine context is supported right now
-
   * I expect implementing this feature to be a breaking change.
 * Ordering
 * Cross-domain editing
-
-  * Currently you can work with group policies from your workstation's domain only
+  * Currently you can work only with group policies from your workstation's domain.
 
 ## Roadmap
 
-1. [IN PROGRESS] Add Users support (section "Local Users and Groups") and add some tests
+1. [DONE] Add Users support (Local Users and Groups" section)
+1. [IN PROGRESS] Tests for Users.
+1. Printers
 1. Support for changing the following properties:
     * [bool]$removePolicy
     * [bool]$bypassErrors

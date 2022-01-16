@@ -86,7 +86,9 @@ function Deserialize-GPPSectionGroups {
                     [GPPItemUserSubAuthority]$BuiltInUser = $GPPItemPropertiesElement.subAuthority
                 }
                 else {
-                    $BuiltInUser = $null
+                    if ($null -ne $BuiltInUser) {
+                        Remove-Variable -Name 'BuiltInUser'
+                    }
                 }
 
                 $GPPItemPropertiesUser = if ($UserMustChangePassword) {

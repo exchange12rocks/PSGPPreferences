@@ -43,5 +43,11 @@ function Remove-GPPUser {
         [GPPContext]$Context = $ModuleWideDefaultGPPContext
     )
 
-    Remove-GPPGroupsItem @PSBoundParameters -Context $Context -ItemType ([GPPItemUser])
+    $RemoveGPPGroupsItemParameters = $PSBoundParameters
+    $RemoveGPPGroupsItemParameters.Add('ItemType', ([GPPItemUser]))
+    if (-not $GPPSection) {
+        $RemoveGPPGroupsItemParameters.Add('Context', $Context)
+    }
+
+    Remove-GPPGroupsItem @RemoveGPPGroupsItemParameters
 }

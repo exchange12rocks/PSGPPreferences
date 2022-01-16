@@ -113,7 +113,12 @@ function Remove-GPPGroupsItem {
 
         if ($FilteredObjects) {
             foreach ($ObjectToRemove in $FilteredObjects) {
-                [void]$WorkObjects.Remove($ObjectToRemove)
+                if ($WorkObjects.Count -gt 1) {
+                    [void]$WorkObjects.Remove($ObjectToRemove)
+                }
+                else {
+                    [void]$WorkGPPSection.Members.Remove($ObjectToRemove)
+                }
             }
             if ($GPPSection) {
                 $WorkGPPSection

@@ -128,69 +128,71 @@ function Set-GPPGroup {
             $InputObject = Get-GPPGroup @GetFunctionParameters -GPPSection $GPPSection
         }
 
-        if ($PSBoundParameters.ContainsKey('Action')) {
-            $InputObject.Properties.Action = if ($PSBoundParameters.ContainsKey('Action')) {
-                [GPPItemAction]$Action.value__
-            }
-            else {
-                [GPPItemAction]::U
-            }
-        }
-
-        if ($InputObject.Properties.Action -ne [GPPItemAction]::D) {
-            if ($PSBoundParameters.ContainsKey('NewName')) {
-                if ($InputObject.Properties.Action -eq [GPPItemAction]::U) {
-                    $InputObject.Properties.NewName = $NewName
+        if ($InputObject) {
+            if ($PSBoundParameters.ContainsKey('Action')) {
+                $InputObject.Properties.Action = if ($PSBoundParameters.ContainsKey('Action')) {
+                    [GPPItemAction]$Action.value__
+                }
+                else {
+                    [GPPItemAction]::U
                 }
             }
-            if ($PSBoundParameters.ContainsKey('Description')) {
-                $InputObject.Properties.Description = $Description
-            }
-            if ($PSBoundParameters.ContainsKey('DeleteAllUsers')) {
-                $InputObject.Properties.DeleteAllUsers = $DeleteAllUsers
-            }
-            if ($PSBoundParameters.ContainsKey('DeleteAllGroups')) {
-                $InputObject.Properties.DeleteAllGroups = $DeleteAllGroups
-            }
-            if ($PSBoundParameters.ContainsKey('Members')) {
-                $InputObject.Properties.Members = $Members
-            }
-            if ($PSBoundParameters.ContainsKey('Description')) {
-            }
 
-            # The NewName property applicable to the Update action only
-            if ($InputObject.Properties.Action -eq [GPPItemAction]::C -and $InputObject.Properties.NewName) {
+            if ($InputObject.Properties.Action -ne [GPPItemAction]::D) {
+                if ($PSBoundParameters.ContainsKey('NewName')) {
+                    if ($InputObject.Properties.Action -eq [GPPItemAction]::U) {
+                        $InputObject.Properties.NewName = $NewName
+                    }
+                }
+                if ($PSBoundParameters.ContainsKey('Description')) {
+                    $InputObject.Properties.Description = $Description
+                }
+                if ($PSBoundParameters.ContainsKey('DeleteAllUsers')) {
+                    $InputObject.Properties.DeleteAllUsers = $DeleteAllUsers
+                }
+                if ($PSBoundParameters.ContainsKey('DeleteAllGroups')) {
+                    $InputObject.Properties.DeleteAllGroups = $DeleteAllGroups
+                }
+                if ($PSBoundParameters.ContainsKey('Members')) {
+                    $InputObject.Properties.Members = $Members
+                }
+                if ($PSBoundParameters.ContainsKey('Description')) {
+                }
+
+                # The NewName property applicable to the Update action only
+                if ($InputObject.Properties.Action -eq [GPPItemAction]::C -and $InputObject.Properties.NewName) {
+                    $InputObject.Properties.NewName = $null
+                }
+            }
+            else {
+                # Items with the Delete action, should not have all these properties (GUI sets it this way)
+
                 $InputObject.Properties.NewName = $null
+                $InputObject.Properties.Description = $null
+                $InputObject.Properties.DeleteAllUsers = $null
+                $InputObject.Properties.DeleteAllGroups = $null
+                $InputObject.Properties.Members = $null
             }
-        }
-        else {
-            # Items with the Delete action, should not have all these properties (GUI sets it this way)
 
-            $InputObject.Properties.NewName = $null
-            $InputObject.Properties.Description = $null
-            $InputObject.Properties.DeleteAllUsers = $null
-            $InputObject.Properties.DeleteAllGroups = $null
-            $InputObject.Properties.Members = $null
-        }
+            if ($PSBoundParameters.ContainsKey('Disable')) {
+                $InputObject.disabled = $Disable
+            }
 
-        if ($PSBoundParameters.ContainsKey('Disable')) {
-            $InputObject.disabled = $Disable
-        }
+            $InputObject.image = $InputObject.Properties.action.value__ # Fixes up the item's icon in case we changed its action
 
-        $InputObject.image = $InputObject.Properties.action.value__ # Fixes up the item's icon in case we changed its action
+            $NewGPPSection = Remove-GPPGroup -GPPSection $GPPSection -UID $InputObject.uid
 
-        $NewGPPSection = Remove-GPPGroup -GPPSection $GPPSection -UID $InputObject.uid
+            if ($NewGPPSection) {
+                $NewGPPSection.Members.Add($InputObject)
+            }
+            else {
+                $NewGPPSection = [GPPSectionGroups]::new($InputObject, $false)
+            }
 
-        if ($NewGPPSection) {
-            $NewGPPSection.Members.Add($InputObject)
+            if ($PassThru) {
+                $InputObject
+            }
+            Set-GPPSection -InputObject $NewGPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
         }
-        else {
-            $NewGPPSection = [GPPSectionGroups]::new($InputObject, $false)
-        }
-
-        if ($PassThru) {
-            $InputObject
-        }
-        Set-GPPSection -InputObject $NewGPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
     }
 }
