@@ -5,7 +5,7 @@ function Set-GPPUser {
         [Parameter(ParameterSetName = 'ByGPOIdObject', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameObjectUserMustChangePassword', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdObjectUserMustChangePassword', Mandatory)]
-        [GPPItemUser]$InputObject,
+        [GPPItemUser[]]$InputObject,
         [Parameter(ParameterSetName = 'ByGPONameItemName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPOIdItemName', Mandatory)]
         [Parameter(ParameterSetName = 'ByGPONameItemNameUserMustChangePassword', Mandatory)]
@@ -244,84 +244,86 @@ function Set-GPPUser {
         }
 
         if ($InputObject) {
-            if ($PSBoundParameters.ContainsKey('Action')) {
-                $InputObject.Properties.Action = switch ($Action) {
-                ([GPPItemUserActionDisplay]::Update) {
-                        [GPPItemAction]::U
-                    }
-                ([GPPItemUserActionDisplay]::Delete) {
-                        [GPPItemAction]::D
-                    }
-                }
-            }
-
-            if ($InputObject.Properties.Action -ne [GPPItemAction]::D) {
-                if ($PSBoundParameters.ContainsKey('UserMustChangePassword')) {
-                    if ($UserMustChangePassword) {
-                        $InputObject.Properties.noChange = $null
-                        $InputObject.Properties.neverExpires = $null
-                    }
-                    $InputObject.Properties.changeLogon = $UserMustChangePassword
-                }
-                elseif ($PSBoundParameters.ContainsKey('PasswordNeverExpires') -or $PSBoundParameters.ContainsKey('UserMayNotChangePassword')) {
-                    if ($PasswordNeverExpires -or $UserMayNotChangePassword) {
-                        $InputObject.Properties.changeLogon = $null
-                    }
-                    if ($PSBoundParameters.ContainsKey('PasswordNeverExpires')) {
-                        $InputObject.Properties.neverExpires = $PasswordNeverExpires
-                    }
-                    if ($PSBoundParameters.ContainsKey('UserMayNotChangePassword')) {
-                        $InputObject.Properties.noChange = $UserMayNotChangePassword
+            foreach ($UserObject in $InputObject) {
+                if ($PSBoundParameters.ContainsKey('Action')) {
+                    $UserObject.Properties.Action = switch ($Action) {
+                        ([GPPItemUserActionDisplay]::Update) {
+                            [GPPItemAction]::U
+                        }
+                        ([GPPItemUserActionDisplay]::Delete) {
+                            [GPPItemAction]::D
+                        }
                     }
                 }
 
-                if ($PSBoundParameters.ContainsKey('NewName')) {
-                    $InputObject.Properties.newName = $NewName
-                }
-                if ($PSBoundParameters.ContainsKey('FullName')) {
-                    $InputObject.Properties.fullName = $FullName
-                }
-                if ($PSBoundParameters.ContainsKey('Description')) {
-                    $InputObject.Properties.description = $Description
-                }
-                if ($PSBoundParameters.ContainsKey('AccountDisabled')) {
-                    $InputObject.Properties.acctDisabled = $AccountDisabled
-                }
-                if ($PSBoundParameters.ContainsKey('AccountExpires')) {
-                    $InputObject.Properties.expires = Convert-DateTimeToGPPExpirationDate -DateTime $AccountExpires
-                }
-            }
-            else {
-                $InputObject.Properties.newName = $null
-                $InputObject.Properties.fullName = $null
-                $InputObject.Properties.description = $null
-                $InputObject.Properties.changeLogon = $null
-                $InputObject.Properties.noChange = $null
-                $InputObject.Properties.neverExpires = $null
-                $InputObject.Properties.acctDisabled = $null
-                $InputObject.Properties.subAuthority = $null
-                $InputObject.Properties.expires = $null
-            }
+                if ($UserObject.Properties.Action -ne [GPPItemAction]::D) {
+                    if ($PSBoundParameters.ContainsKey('UserMustChangePassword')) {
+                        if ($UserMustChangePassword) {
+                            $UserObject.Properties.noChange = $null
+                            $UserObject.Properties.neverExpires = $null
+                        }
+                        $UserObject.Properties.changeLogon = $UserMustChangePassword
+                    }
+                    elseif ($PSBoundParameters.ContainsKey('PasswordNeverExpires') -or $PSBoundParameters.ContainsKey('UserMayNotChangePassword')) {
+                        if ($PasswordNeverExpires -or $UserMayNotChangePassword) {
+                            $UserObject.Properties.changeLogon = $null
+                        }
+                        if ($PSBoundParameters.ContainsKey('PasswordNeverExpires')) {
+                            $UserObject.Properties.neverExpires = $PasswordNeverExpires
+                        }
+                        if ($PSBoundParameters.ContainsKey('UserMayNotChangePassword')) {
+                            $UserObject.Properties.noChange = $UserMayNotChangePassword
+                        }
+                    }
 
-            if ($PSBoundParameters.ContainsKey('Disable')) {
-                $InputObject.disabled = $Disable
-            }
+                    if ($PSBoundParameters.ContainsKey('NewName')) {
+                        $UserObject.Properties.newName = $NewName
+                    }
+                    if ($PSBoundParameters.ContainsKey('FullName')) {
+                        $UserObject.Properties.fullName = $FullName
+                    }
+                    if ($PSBoundParameters.ContainsKey('Description')) {
+                        $UserObject.Properties.description = $Description
+                    }
+                    if ($PSBoundParameters.ContainsKey('AccountDisabled')) {
+                        $UserObject.Properties.acctDisabled = $AccountDisabled
+                    }
+                    if ($PSBoundParameters.ContainsKey('AccountExpires')) {
+                        $UserObject.Properties.expires = Convert-DateTimeToGPPExpirationDate -DateTime $AccountExpires
+                    }
+                }
+                else {
+                    $UserObject.Properties.newName = $null
+                    $UserObject.Properties.fullName = $null
+                    $UserObject.Properties.description = $null
+                    $UserObject.Properties.changeLogon = $null
+                    $UserObject.Properties.noChange = $null
+                    $UserObject.Properties.neverExpires = $null
+                    $UserObject.Properties.acctDisabled = $null
+                    $UserObject.Properties.subAuthority = $null
+                    $UserObject.Properties.expires = $null
+                }
 
-            $InputObject.image = $InputObject.Properties.action.value__ # Fixes up the item's icon in case we changed its action
+                if ($PSBoundParameters.ContainsKey('Disable')) {
+                    $UserObject.disabled = $Disable
+                }
 
-            $NewGPPSection = Remove-GPPUser -GPPSection $GPPSection -UID $InputObject.uid
+                $UserObject.image = $UserObject.Properties.action.value__ # Fixes up the item's icon in case we changed its action
 
-            if ($NewGPPSection) {
-                $NewGPPSection.Members.Add($InputObject)
-            }
-            else {
-                $NewGPPSection = [GPPSectionGroups]::new($InputObject, $false)
-            }
+                $NewGPPSection = Remove-GPPUser -GPPSection $GPPSection -UID $UserObject.uid
 
-            if ($PassThru) {
-                $InputObject
+                if ($NewGPPSection) {
+                    $NewGPPSection.Members.Add($UserObject)
+                }
+                else {
+                    $NewGPPSection = [GPPSectionGroups]::new($UserObject, $false)
+                }
+
+                if ($PassThru) {
+                    $UserObject
+                }
+                Set-GPPSection -InputObject $NewGPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
             }
-            Set-GPPSection -InputObject $NewGPPSection -GPOId $GPOId -Context $Context -Type ([GPPType]::Groups)
         }
     }
 }
