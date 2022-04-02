@@ -87,6 +87,8 @@ function Deserialize-GPPSectionGroups {
                 }
                 else {
                     if ($null -ne $BuiltInUser) {
+                        # When in the XML-file, we have a built-in user item and then a regular user item, the $BuiltInUser variable will still have its value when processing the regular user.
+                        # This confuses the constructor. And we cannot use $BuiltInUser = $null, because the type of this variable does not allow that.
                         Remove-Variable -Name 'BuiltInUser'
                     }
                 }
@@ -115,5 +117,4 @@ function Deserialize-GPPSectionGroups {
         $false
     }
     [GPPSectionGroups]::new($GroupsMembers, $SectionDisabled)
-
 }
