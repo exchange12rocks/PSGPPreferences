@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Groups clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}">
+<Groups disabled="1" clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}">
 	<User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="Disabled-User" image="2" changed="2021-03-21 13:16:55" uid="{868E37FD-3A7C-4D17-BF77-2F9A1663B3FD}" userContext="0" removePolicy="0">
 		<Properties action="U" newName="New Name" fullName="Full Name" description="My Description" cpassword="" changeLogon="1" noChange="0" neverExpires="0" acctDisabled="1" userName="Disabled-User"/>
 	</User>
