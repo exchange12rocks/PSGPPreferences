@@ -54,7 +54,7 @@ function Deserialize-GPPSectionGroups {
 
                 $GPPItemPropertiesGroup = [GPPItemPropertiesGroup]::new($GPPItemPropertiesElement.action, $GPPItemPropertiesElement.groupName, $GPPItemPropertiesElement.groupSid, $GPPItemPropertiesElement.newName, $GPPItemPropertiesElement.description, $Members, $DeleteAllUsers, $DeleteAllGroups)
 
-                $GroupsMembers.Add([GPPItemGroup]::new($GPPItemPropertiesGroup, [guid]$ChildNode.uid, $Disabled))
+                $GroupsMembers.Add([GPPItemGroup]::new($GPPItemPropertiesGroup, [guid]$ChildNode.uid, $Disabled, $ChildNode.name))
             }
             'User' {
                 $UserMustChangePassword = if ($GPPItemPropertiesElement.changeLogon -eq 1) {
@@ -87,6 +87,8 @@ function Deserialize-GPPSectionGroups {
                 }
                 else {
                     if ($null -ne $BuiltInUser) {
+                        # When in the XML-file, we have a built-in user item and then a regular user item, the $BuiltInUser variable will still have its value when processing the regular user.
+                        # This confuses the constructor. And we cannot use $BuiltInUser = $null, because the type of this variable does not allow that.
                         Remove-Variable -Name 'BuiltInUser'
                     }
                 }
@@ -98,7 +100,7 @@ function Deserialize-GPPSectionGroups {
                     [GPPItemPropertiesUser]::new($GPPItemPropertiesElement.action, $BuiltInUser, $GPPItemPropertiesElement.userName, $GPPItemPropertiesElement.newName, $GPPItemPropertiesElement.fullName, $GPPItemPropertiesElement.description, $UserMayNotChangePassword, $PasswordNeverExpires, $AccountDisabled, $GPPItemPropertiesElement.expires)
                 }
 
-                $GroupsMembers.Add([GPPItemUser]::new($GPPItemPropertiesUser, [guid]$ChildNode.uid, $Disabled))
+                $GroupsMembers.Add([GPPItemUser]::new($GPPItemPropertiesUser, [guid]$ChildNode.uid, $Disabled, $ChildNode.name))
             }
         }
     }
@@ -115,5 +117,4 @@ function Deserialize-GPPSectionGroups {
         $false
     }
     [GPPSectionGroups]::new($GroupsMembers, $SectionDisabled)
-
 }

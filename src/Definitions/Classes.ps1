@@ -55,8 +55,8 @@ class GPPItem : PSGPPreferencesItem {
     hidden [int]$image = $Properties.action.value__
     [datetime]$changed = (Get-Date)
     [guid]$uid = [guid]::NewGuid()
-    [bool]$removePolicy
-    [bool]$bypassErrors = $true
+    [bool]$removePolicy # not yet implemented (Remove this item when it is no longer applied)
+    [bool]$bypassErrors = $true # not yet implemented (Stop processing items in this extension if an error occures (Inverted))
     [bool]$disabled
     [GPPItemProperties]$Properties
     [GPPItemFilter[]]$Filters

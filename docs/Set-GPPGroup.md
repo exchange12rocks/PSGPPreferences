@@ -14,14 +14,14 @@ Sets properties of a group definition in a specified Group Policy object.
 
 ### ByGPOIdObject
 ```
-Set-GPPGroup -InputObject <GPPItemGroup> -GPOId <Guid> [-Context <GPPContext>] [-Action <GPPItemActionDisplay>]
- [-NewName <String>] [-Description <String>] [-DeleteAllUsers] [-DeleteAllGroups] [-Disable]
- [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
+Set-GPPGroup -InputObject <GPPItemGroup[]> -GPOId <Guid> [-Context <GPPContext>]
+ [-Action <GPPItemActionDisplay>] [-NewName <String>] [-Description <String>] [-DeleteAllUsers]
+ [-DeleteAllGroups] [-Disable] [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
 
 ### ByGPONameObject
 ```
-Set-GPPGroup -InputObject <GPPItemGroup> -GPOName <String> [-Context <GPPContext>]
+Set-GPPGroup -InputObject <GPPItemGroup[]> -GPOName <String> [-Context <GPPContext>]
  [-Action <GPPItemActionDisplay>] [-NewName <String>] [-Description <String>] [-DeleteAllUsers]
  [-DeleteAllGroups] [-Disable] [-Members <GPPItemGroupMember[]>] [-PassThru] [<CommonParameters>]
 ```
@@ -235,7 +235,7 @@ Accept wildcard characters: False
 If you already have a group definition object in memory, which you want to write into a Group Policy, you can pass in into this parameter.
 
 ```yaml
-Type: GPPItemGroup
+Type: GPPItemGroup[]
 Parameter Sets: ByGPOIdObject, ByGPONameObject
 Aliases:
 

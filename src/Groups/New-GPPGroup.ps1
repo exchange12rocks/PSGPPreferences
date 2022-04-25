@@ -230,7 +230,7 @@ function New-GPPGroup {
         [GPPItemAction]::D
     }
 
-    $Properties = [GPPItemPropertiesGroup]::new($Action, $Name, $SID, $NewName, $Description, $Members)
+    $Properties = [GPPItemPropertiesGroup]::new($Action, $Name, $SID, $NewName, $Description, $Members, $DeleteAllUsers, $DeleteAllGroups)
     $Group = [GPPItemGroup]::new($Properties, $Disable)
 
     if ($GPOName -or $GPOId) {
