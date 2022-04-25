@@ -54,7 +54,7 @@ function Deserialize-GPPSectionGroups {
 
                 $GPPItemPropertiesGroup = [GPPItemPropertiesGroup]::new($GPPItemPropertiesElement.action, $GPPItemPropertiesElement.groupName, $GPPItemPropertiesElement.groupSid, $GPPItemPropertiesElement.newName, $GPPItemPropertiesElement.description, $Members, $DeleteAllUsers, $DeleteAllGroups)
 
-                $GroupsMembers.Add([GPPItemGroup]::new($GPPItemPropertiesGroup, [guid]$ChildNode.uid, $Disabled))
+                $GroupsMembers.Add([GPPItemGroup]::new($GPPItemPropertiesGroup, [guid]$ChildNode.uid, $Disabled, $ChildNode.name))
             }
             'User' {
                 $UserMustChangePassword = if ($GPPItemPropertiesElement.changeLogon -eq 1) {
@@ -100,7 +100,7 @@ function Deserialize-GPPSectionGroups {
                     [GPPItemPropertiesUser]::new($GPPItemPropertiesElement.action, $BuiltInUser, $GPPItemPropertiesElement.userName, $GPPItemPropertiesElement.newName, $GPPItemPropertiesElement.fullName, $GPPItemPropertiesElement.description, $UserMayNotChangePassword, $PasswordNeverExpires, $AccountDisabled, $GPPItemPropertiesElement.expires)
                 }
 
-                $GroupsMembers.Add([GPPItemUser]::new($GPPItemPropertiesUser, [guid]$ChildNode.uid, $Disabled))
+                $GroupsMembers.Add([GPPItemUser]::new($GPPItemPropertiesUser, [guid]$ChildNode.uid, $Disabled, $ChildNode.name))
             }
         }
     }
