@@ -14,7 +14,7 @@ Sets properties of a user definition in a specified Group Policy object.
 
 ### ByGPOIdObjectUserMustChangePassword
 ```
-Set-GPPUser -InputObject <GPPItemUser> -GPOId <Guid> [-Context <GPPContext>]
+Set-GPPUser -InputObject <GPPItemUser[]> -GPOId <Guid> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>]
  [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
@@ -22,7 +22,7 @@ Set-GPPUser -InputObject <GPPItemUser> -GPOId <Guid> [-Context <GPPContext>]
 
 ### ByGPONameObjectUserMustChangePassword
 ```
-Set-GPPUser -InputObject <GPPItemUser> -GPOName <String> [-Context <GPPContext>]
+Set-GPPUser -InputObject <GPPItemUser[]> -GPOName <String> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-UserMustChangePassword <Boolean>]
  [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
@@ -30,7 +30,7 @@ Set-GPPUser -InputObject <GPPItemUser> -GPOName <String> [-Context <GPPContext>]
 
 ### ByGPOIdObject
 ```
-Set-GPPUser -InputObject <GPPItemUser> -GPOId <Guid> [-Context <GPPContext>]
+Set-GPPUser -InputObject <GPPItemUser[]> -GPOId <Guid> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>]
  [-UserMayNotChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
@@ -38,7 +38,7 @@ Set-GPPUser -InputObject <GPPItemUser> -GPOId <Guid> [-Context <GPPContext>]
 
 ### ByGPONameObject
 ```
-Set-GPPUser -InputObject <GPPItemUser> -GPOName <String> [-Context <GPPContext>]
+Set-GPPUser -InputObject <GPPItemUser[]> -GPOName <String> [-Context <GPPContext>]
  [-Action <GPPItemUserActionDisplay>] [-NewName <String>] [-FullName <String>] [-Description <String>]
  [-AccountDisabled <Boolean>] [-AccountExpires <DateTime>] [-PasswordNeverExpires <Boolean>]
  [-UserMayNotChangePassword <Boolean>] [-Disable <Boolean>] [-PassThru] [<CommonParameters>]
@@ -331,7 +331,7 @@ Accept wildcard characters: False
 If you already have a user definition object in memory, which you want to write into a Group Policy, you can pass in into this parameter.
 
 ```yaml
-Type: GPPItemUser
+Type: GPPItemUser[]
 Parameter Sets: ByGPOIdObjectUserMustChangePassword, ByGPONameObjectUserMustChangePassword, ByGPOIdObject, ByGPONameObject
 Aliases:
 
