@@ -423,6 +423,19 @@ class GPPItemGroup : GPPItemGroupsSection {
         $this.uid = $UID
         $this.disabled = $Disabled
     }
+
+    GPPItemGroup([GPPItemPropertiesGroup] $Properties, [bool] $Disabled, [string] $Name) {
+        $this.Properties = $Properties
+        $this.name = $Name
+        $this.disabled = $Disabled
+    }
+
+    GPPItemGroup([GPPItemPropertiesGroup] $Properties, [guid] $UID, [bool] $Disabled, [string] $Name) {
+        $this.Properties = $Properties
+        $this.name = $Name
+        $this.uid = $UID
+        $this.disabled = $Disabled
+    }
 }
 
 class GPPItemPropertiesUser : GPPItemProperties {
@@ -543,6 +556,19 @@ class GPPItemUser : GPPItemGroupsSection {
     GPPItemUser([GPPItemPropertiesUser] $Properties, [guid] $UID, [bool] $Disabled) {
         $this.Properties = $Properties
         $this.name = $Properties.userName
+        $this.uid = $UID
+        $this.disabled = $Disabled
+    }
+
+    GPPItemUser([GPPItemPropertiesUser] $Properties, [bool] $Disabled, [string] $Name) {
+        $this.Properties = $Properties
+        $this.name = $Name
+        $this.disabled = $Disabled
+    }
+
+    GPPItemUser([GPPItemPropertiesUser] $Properties, [guid] $UID, [bool] $Disabled, [string] $Name) {
+        $this.Properties = $Properties
+        $this.name = $Name
         $this.uid = $UID
         $this.disabled = $Disabled
     }
