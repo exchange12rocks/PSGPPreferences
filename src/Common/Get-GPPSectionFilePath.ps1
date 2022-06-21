@@ -9,7 +9,7 @@ function Get-GPPSectionFilePath {
         [switch]$Extended
     )
 
-    $PolicyPath = Get-GPOFilePath -Id $Id
+    $PolicyPath = Get-GPOFilePath -Id $GPOId
     $ContextPath = Join-Path -Path $PolicyPath -ChildPath ('{0}\Preferences' -f $Context)
     $FolderPath = Join-Path -Path $ContextPath -ChildPath $Type
     $FilePath = Join-Path -Path $FolderPath -ChildPath ('{0}.xml' -f $Type)
