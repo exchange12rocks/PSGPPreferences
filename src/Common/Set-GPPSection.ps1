@@ -33,5 +33,5 @@ function Set-GPPSection {
     }
 
     Set-Content -Path $FilePath -Value $XMLDocument.OuterXml
-    Update-GPOVersion -Id $GPOId
+    Update-GPOMetadata -Id $GPOId -Type $Type
 }
