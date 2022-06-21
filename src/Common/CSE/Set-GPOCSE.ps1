@@ -7,6 +7,6 @@ function Set-GPOCSE {
     )
 
     $GPO = Get-GPOObject -Id $Id
-    $GPO.gPCMachineExtensionNames[0] = $Value
+    $GPO.InvokeSet('gPCMachineExtensionNames', $Value)
     $GPO.CommitChanges()
 }
