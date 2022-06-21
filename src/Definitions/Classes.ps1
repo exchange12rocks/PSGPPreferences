@@ -299,7 +299,6 @@ class GPPItemFilterRunOnce : GPPItemFilter {
 class GPPItemFilterCollection : GPPItemFilter {
     [GPPItemFilter[]]$Members
 }
-
 #endregion
 
 #region Groups
@@ -333,13 +332,13 @@ class GPPItemGroupMember : PSGPPreferencesItem {
     [GPPItemGroupMemberAction]$action
     [System.Security.Principal.SecurityIdentifier]$sid
 
-    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string]$Name, [System.Security.Principal.SecurityIdentifier] $SID) {
+    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID) {
         $this.action = $Action
         $this.name = $Name
         $this.sid = $SID
     }
 
-    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string]$Name) {
+    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string] $Name) {
         $this.action = $Action
         $this.name = $Name
     }
@@ -443,13 +442,13 @@ class GPPItemPropertiesUser : GPPItemProperties {
     [string]$fullName
     [string]$description
     # [string]$cpassword - EVIL, EVIL PROPERTY, ONE SHOULD NEVER USE IT
-    [bool]$changeLogon
-    [bool]$noChange
-    [bool]$neverExpires
+    [bool]$changeLogon # User must change password at next logon
+    [bool]$noChange # User cannot change password
+    [bool]$neverExpires # Password never expires
     [bool]$acctDisabled
-    [nullable[GPPItemUserSubAuthority]]$subAuthority
+    [nullable[GPPItemUserSubAuthority]]$subAuthority # One of two built-in users: RID_ADMIN - Administrator, RID_GUEST - Guest
     [string]$userName
-    [string]$expires
+    [string]$expires # Account expires
 
     hidden static [string] GetSubAuthorityDisplayNameById ([string] $ID) {
         $GPPItemUserSubAuthorityDisplayName = @(
