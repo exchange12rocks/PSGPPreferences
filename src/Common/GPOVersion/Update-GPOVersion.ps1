@@ -10,5 +10,5 @@ function Update-GPOVersion {
     $GPO.versionNumber[0] = $GPOVersionNumber
     $GPO.CommitChanges()
 
-    Update-GPOFileVersion -IdFormatted $IdFormatted -Version $GPOVersionNumber
+    Update-GPOFileVersion -Id $Id -Version $GPOVersionNumber
 }
