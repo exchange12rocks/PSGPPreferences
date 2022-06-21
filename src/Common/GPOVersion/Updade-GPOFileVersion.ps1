@@ -1,7 +1,7 @@
 function Update-GPOFileVersion {
     Param (
         [Parameter(Mandatory)]
-        [string]$IdFormatted,
+        [guid]$Id,
         [Parameter(Mandatory)]
         [int]$Version
     )
@@ -9,6 +9,7 @@ function Update-GPOFileVersion {
     $Domain = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
     $DomainDnsName = $Domain.Name
 
+    $IdFormatted = $Id.ToString('B')
     $GPOFSPath = '\\{0}\SYSVOL\{0}\Policies\{1}' -f $DomainDnsName, $IdFormatted
     $GPTIniPath = Join-Path -Path $GPOFSPath -ChildPath 'GPT.INI'
     $Value = '[General]
