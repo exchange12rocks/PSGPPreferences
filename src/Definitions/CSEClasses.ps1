@@ -33,7 +33,8 @@ class GPOExtensionNamesAttribute {
     }
 
     [string] ToString () {
-        $SortedTools = $this.Members.Tool | Sort-Object
+        # D02B1F72-3407-48AE-BA88-E8213C6761F1 is Administrative Templates ID - it is not added into the tools list when editing via GUI
+        $SortedTools = $this.Members.Tool | Where-Object -FilterScript {$_ -ne [guid]'D02B1F72-3407-48AE-BA88-E8213C6761F1'} | Sort-Object
 
         $sb = [System.Text.StringBuilder]::new()
         foreach ($Tool in $SortedTools) {
