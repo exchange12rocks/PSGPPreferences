@@ -1,6 +1,6 @@
 @{
     RootModule        = 'PSGPPreferences.psm1'
-    ModuleVersion     = '0.3.1'
+    ModuleVersion     = '0.3.2'
     GUID              = '840171e9-2b12-448d-9fe3-9365af87081e'
     Author            = 'Kirill Nikolaev'
     PowerShellVersion = '5.1'
