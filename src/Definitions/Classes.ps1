@@ -300,6 +300,63 @@ class GPPItemFilterCollection : GPPItemFilter {
     [GPPItemFilter[]]$Members
 }
 
+class GpoCseSet {
+    [guid[]]$Tool
+    [guid]$CSE
+
+    GpoCseSet([guid] $CseId) {
+        $this.CSE = $CseId
+        $this.Tool = Get-GpoToolIdByCseId -Id $CseId
+    }
+
+    GpoCseSet([guid] $CseId, [guid[]] $ToolId) {
+        $this.CSE = $CseId
+        $this.Tool = $ToolId
+    }
+}
+
+class GPOExtensionNamesAttribute {
+    [GpoCseSet[]]$Members
+
+    GPOExtensionNamesAttribute([guid[]] $CseId) {
+        $this.Members = foreach ($Id in $CseId) {
+            [GpoCseSet]::new($Id)
+        }
+    }
+
+    GPOExtensionNamesAttribute([GpoCseSet[]] $Members) {
+        $this.Members = $Members
+    }
+
+    [string] ToString () {
+        $SortedTools = $this.Members.Tool | Sort-Object
+
+        $sb = [System.Text.StringBuilder]::new()
+        foreach ($Tool in $SortedTools) {
+            [void]$sb.Append($Tool.ToString('B'))
+        }
+        $SortedToolsString = $sb.ToString()
+
+        $SortedCSE = $this.Members.CSE | Sort-Object
+
+        $sb = [System.Text.StringBuilder]::new()
+        foreach ($CSE in $SortedCSE) {
+            $CurrentCSESet = $this.Members | Where-Object -FilterScript { $_.CSE -eq $CSE }
+            $CurrentCSEString = $CSE.ToString('B')
+            $SortedCSETools = $CurrentCSESet.Tool | Sort-Object
+            $sb2 = [System.Text.StringBuilder]::new()
+            foreach ($Tool in $SortedCSETools) {
+                [void]$sb2.Append($Tool.ToString('B'))
+            }
+            $SortedCSEToolsString = $sb2.ToString()
+            [void]$sb.Append(('[{0}{1}]' -f $CurrentCSEString, $SortedCSEToolsString))
+        }
+        $SortedCSEString = $sb.ToString()
+        #return $SortedCSEString
+        return '[{{00000000-0000-0000-0000-000000000000}}{0}]{1}' -f $SortedToolsString, $SortedCSEString
+    }
+}
+
 #endregion
 
 #region Groups
@@ -333,13 +390,13 @@ class GPPItemGroupMember : PSGPPreferencesItem {
     [GPPItemGroupMemberAction]$action
     [System.Security.Principal.SecurityIdentifier]$sid
 
-    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string]$Name, [System.Security.Principal.SecurityIdentifier] $SID) {
+    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string] $Name, [System.Security.Principal.SecurityIdentifier] $SID) {
         $this.action = $Action
         $this.name = $Name
         $this.sid = $SID
     }
 
-    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string]$Name) {
+    GPPItemGroupMember([GPPItemGroupMemberAction] $Action, [string] $Name) {
         $this.action = $Action
         $this.name = $Name
     }
@@ -443,13 +500,13 @@ class GPPItemPropertiesUser : GPPItemProperties {
     [string]$fullName
     [string]$description
     # [string]$cpassword - EVIL, EVIL PROPERTY, ONE SHOULD NEVER USE IT
-    [bool]$changeLogon
-    [bool]$noChange
-    [bool]$neverExpires
+    [bool]$changeLogon # User must change password at next logon
+    [bool]$noChange # User cannot change password
+    [bool]$neverExpires # Password never expires
     [bool]$acctDisabled
-    [nullable[GPPItemUserSubAuthority]]$subAuthority
+    [nullable[GPPItemUserSubAuthority]]$subAuthority # One of two built-in users: RID_ADMIN - Administrator, RID_GUEST - Guest
     [string]$userName
-    [string]$expires
+    [string]$expires # Account expires
 
     hidden static [string] GetSubAuthorityDisplayNameById ([string] $ID) {
         $GPPItemUserSubAuthorityDisplayName = @(
