@@ -3,9 +3,10 @@ function Update-GPOMetadata {
         [Parameter(Mandatory)]
         [guid]$Id,
         [Parameter(Mandatory)]
-        [GPPType]$Type
+        [GPPType]$Type,
+        [switch]$Remove
     )
 
     Update-GPOVersion -Id $Id
-    Update-GPOCSE -Id $Id -Type = $Type
+    Update-GPOCSE -Id $Id -Type $Type -Remove:$Remove
 }

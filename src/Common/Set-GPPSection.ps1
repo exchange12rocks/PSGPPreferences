@@ -32,6 +32,12 @@ function Set-GPPSection {
         $null = New-Item -Path $FolderPath -ItemType Directory
     }
 
-    Set-Content -Path $FilePath -Value $XMLDocument.OuterXml
-    Update-GPOMetadata -Id $GPOId -Type $Type
+    if ($XMLDocument.OuterXml) {
+        Set-Content -Path $FilePath -Value $XMLDocument.OuterXml
+        Update-GPOMetadata -Id $GPOId -Type $Type
+    }
+    else {
+        Remove-Item -Path $FilePath
+        Update-GPOMetadata -Id $GPOId -Type $Type -Remove
+    }
 }
