@@ -9,10 +9,10 @@ function Update-GPOCSE {
 
     $NotContains = $false
 
-    $EnabledCSEs = Get-GPOCSE
+    $EnabledCSEs = Get-GPOCSE -Id $Id
+    $CurrentCSESetDefinition = Get-CseSetByType -Type $Type
     if ($EnabledCSEs) {
-        $CurrentCSESetDefinition = Get-CseSetByType -Type $Type
-        if ($EnabledCSE.CSE -notcontains $CurrentCSESetDefinition.CSE) {
+        if ($EnabledCSEs.CSE -notcontains $CurrentCSESetDefinition.CSE) {
             $NotContains = $true
         }
     }
