@@ -10,6 +10,9 @@ function Deserialize-GPPSection {
         'Groups' {
             Deserialize-GPPSectionGroups -InputObject $RootElement
         }
+        'Printers' {
+            Deserialize-GPPSectionPrinters -InputObject $RootElement
+        }
         'Files' {
             # TODO
         }
