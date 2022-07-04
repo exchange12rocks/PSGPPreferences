@@ -16,6 +16,7 @@ enum GPPItemActionDisplay {
 
 enum GPPType {
     Groups
+    Printers
 }
 
 enum GPPContext {
@@ -578,6 +579,114 @@ class GPPSectionGroups : GPPSection {
     [System.Collections.Generic.List[GPPItemGroupsSection]]$Members = @()
 
     GPPSectionGroups([GPPItemGroupsSection[]] $Members, [bool] $Disabled) {
+        $this.Members = $Members
+        $this.disabled = $Disabled
+    }
+}
+#endregion
+
+#region Printers
+class GPPItemPrintersSection : GPPItem {
+    # This class is needed only because both GPPItemPortPrinter and GPPItemLocalPrinter can be members of GPPSectionPrinters (the "Printers" section in the XML-file)
+}
+
+class GPPItemPropertiesPortPrinterNetworkProtocol {
+ # TODO
+}
+
+class GPPItemPropertiesPortPrinter : GPPItemProperties {
+    [string]$lprQueue
+    [string]$snmpCommunity
+    [GPPItemPropertiesPortPrinterNetworkProtocol]$protocol
+    [int]$portNumber
+    [bool]$doubleSpool # huh?
+    [bool]$snmpEnabled
+    [int]$snmpDevIndex
+    [string]$ipAddress # IPv4 or IPv6 address or a DNS-name 🤦‍♂️
+    [string]$location
+    [string]$localName
+    [string]$comment
+    [bool]$default # works only in user mode
+    [bool]$skipLocal # works only in user mode
+    [bool]$useDNS # specifies if ipAddress is allowed to accept a DNS name
+    [bool]$useIPv6# specifies if ipAddress is allowed to accept an IPv6 address
+    [string]$path # Path do download drivers for the printer. In the moders GUI it is "Printer path", in the old one "Shared driver path"
+    [bool]$deleteAll # only when the action is Delete
+
+}
+
+class GPPItemPortPrinter : GPPItemPrintersSection {
+    static [guid]$clsid = '{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}'
+    [GPPItemPropertiesPortPrinter]$Properties
+    # [string]$status - this property is defined at the GPPItem level. This type of items sets the value of "ipAddress" there
+
+}
+
+class GPPItemPropertiesLocalPrinter : GPPItemProperties {
+    [string]$name
+    [string]$port
+    [string]$path
+    [bool]$default # works only in user mode
+    [bool]$deleteAll
+    [string]$location
+    [string]$comment
+}
+
+class GPPItemLocalPrinter : GPPItemPrintersSection {
+    static [guid]$clsid = '{F08996D5-568B-45f5-BB7A-D3FB1E370B0A}'
+    [GPPItemPropertiesLocalPrinter]$Properties
+    # [string]$status - this property is defined at the GPPItem level. This type of items sets the value of "location" there
+
+    GPPItemUser([GPPItemPropertiesLocalPrinter] $Properties, [bool] $Disabled) {
+        $this.Properties = $Properties
+        $this.name = $Properties.userName
+        $this.disabled = $Disabled
+    }
+
+    GPPItemUser([GPPItemPropertiesLocalPrinter] $Properties, [guid] $UID, [bool] $Disabled) {
+        $this.Properties = $Properties
+        $this.name = $Properties.userName
+        $this.uid = $UID
+        $this.disabled = $Disabled
+    }
+
+    GPPItemUser([GPPItemPropertiesLocalPrinter] $Properties, [bool] $Disabled, [string] $Name) {
+        $this.Properties = $Properties
+        $this.name = $Name
+        $this.disabled = $Disabled
+    }
+
+    GPPItemUser([GPPItemPropertiesLocalPrinter] $Properties, [guid] $UID, [bool] $Disabled, [string] $Name) {
+        $this.Properties = $Properties
+        $this.name = $Name
+        $this.uid = $UID
+        $this.disabled = $Disabled
+    }
+}
+
+class GPPItemPropertiesSharedPrinter : GPPItemProperties {
+    [string]$location
+    [string]$comment
+    [bool]$default # Set this printer as the default printer... - works only in user mode
+    [bool]$skipLocal # ...only if a local printer is not present - works only in user mode
+    [string]$path # Path do download drivers for the printer. In the moders GUI it is "Printer path", in the old one "Shared driver path"
+    [bool]$deleteAll # only when the action is Delete
+    [bool]$deleteMaps # Unmap all local ports - only when the action is Delete
+    [string]$port
+    [bool]$persistent # Reconnect
+}
+
+class GPPItemSharedPrinter : GPPItemPrintersSection { # available in User mode only
+    static [guid]$clsid = '{1F577D12-3D1B-471e-A1B7-060317597B9C}'
+    [GPPItemPropertiesSharedPrinter]$Properties
+    # [string]$status - this property is defined at the GPPItem level. This type of items sets the value of "name" there
+}
+
+class GPPSectionPrinters : GPPSection {
+    static [guid]$clsid = '{1F577D12-3D1B-471e-A1B7-060317597B9C}'
+    [System.Collections.Generic.List[GPPItemPrintersSection]]$Members = @()
+
+    GPPSectionPrinters([GPPItemPrintersSection[]] $Members, [bool] $Disabled) {
         $this.Members = $Members
         $this.disabled = $Disabled
     }
