@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Printers clsid="{1F577D12-3D1B-471e-A1B7-060317597B9C}">
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="1.1.1.1" status="1.1.1.1" image="2" changed="2022-07-03 19:49:45" uid="{6E158291-CE25-475B-AD07-8FFD8947AB42}">
+		<Properties lprQueue="" snmpCommunity="ipcommunity" protocol="PROTOCOL_RAWTCP_TYPE" portNumber="9100" doubleSpool="0" snmpEnabled="1" snmpDevIndex="2" ipAddress="1.1.1.1" action="U" location="IP Location" localName="IPLocalName" comment="IP Comment" default="0" skipLocal="0" useDNS="0" useIPv6="0" path="\\server\ip-printer" deleteAll="0"/>
+	</PortPrinter>
+	<LocalPrinter clsid="{F08996D5-568B-45f5-BB7A-D3FB1E370B0A}" name="COMPrinter" status="My Location" image="2" bypassErrors="1" changed="2022-07-03 19:36:26" uid="{1BB64A92-4E13-4608-9818-B048281E8DF1}">
+		<Properties action="U" name="COMPrinter" port="COM1:" path="\\server\com-printer" default="0" deleteAll="0" location="My Location" comment="My Comment"/>
+	</LocalPrinter>
+	<LocalPrinter clsid="{F08996D5-568B-45f5-BB7A-D3FB1E370B0A}" name="USBPrinter" status="USB Printer Location" image="0" changed="2022-07-03 19:55:54" uid="{A7A646C6-D6FC-4FAD-82A1-50B67C470BAF}">
+		<Properties action="C" name="USBPrinter" port="USB001" path="\\server\usb-printer" default="0" deleteAll="0" location="USB Printer Location" comment="USB Printer Comment"/>
+	</LocalPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="dns.printer.example.com" status="dns.printer.example.com" image="2" changed="2022-07-03 19:49:21" uid="{39E7040E-D24F-4191-94FA-BE599EE6C2E7}">
+		<Properties lprQueue="" snmpCommunity="dnscommunity" protocol="PROTOCOL_RAWTCP_TYPE" portNumber="9100" doubleSpool="0" snmpEnabled="1" snmpDevIndex="2" ipAddress="dns.printer.example.com" action="U" location="DNS Printer Location" localName="DNSLocalName" comment="DNS Printer Comment" default="0" skipLocal="0" useDNS="1" useIPv6="0" path="\\server\dns-printer" deleteAll="0"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="fe80::385e:d888:28c1:7f4c" status="fe80::385e:d888:28c1:7f4c" image="2" changed="2022-07-03 19:49:08" uid="{46EABB1F-6E9D-4083-BD7C-50032B73F57A}">
+		<Properties lprQueue="" snmpCommunity="ip6community" protocol="PROTOCOL_RAWTCP_TYPE" portNumber="9100" doubleSpool="0" snmpEnabled="1" snmpDevIndex="2" ipAddress="fe80::385e:d888:28c1:7f4c" action="U" location="IP6 Location" localName="IP6LocalName" comment="IP6 Comment" default="0" skipLocal="0" useDNS="0" useIPv6="1" path="\\server\ip6-printer" deleteAll="0"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="2.2.2.2" status="2.2.2.2" image="2" changed="2022-07-03 19:49:51" uid="{082BCE28-6A29-4EFF-A662-F076C61D3B3C}">
+		<Properties lprQueue="" snmpCommunity="ipcommunity" protocol="PROTOCOL_RAWTCP_TYPE" portNumber="9100" doubleSpool="0" snmpEnabled="1" snmpDevIndex="2" ipAddress="2.2.2.2" action="U" location="IP Location" localName="" comment="IP Comment" default="0" skipLocal="0" useDNS="0" useIPv6="0" path="\\server\ip-printer" deleteAll="0"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="DNS - Create" status="dns2.printer.example.com" image="0" changed="2022-07-03 19:51:36" uid="{9B434B89-21D5-46F5-8E7F-06652E0FA5B3}">
+		<Properties ipAddress="dns2.printer.example.com" action="C" location="DNS2 Printer Location" localName="DNS2LocalName" comment="DNS2 Printer Comment" default="0" skipLocal="0" useDNS="1" useIPv6="0" path="\\server\dns2-printer" deleteAll="0" lprQueue="" snmpCommunity="dns2community" protocol="PROTOCOL_RAWTCP_TYPE" portNumber="9101" doubleSpool="0" snmpEnabled="1" snmpDevIndex="3"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="LPR Printer" status="fe80::385e:d888:28c1:7f4c" image="2" changed="2022-07-03 19:52:47" uid="{71CCF31F-7287-43DD-A148-B070D3EB5869}">
+		<Properties ipAddress="fe80::385e:d888:28c1:7f4c" action="U" location="IP6L Location" localName="IP6LLocalName" comment="IP6L Comment" default="0" skipLocal="0" useDNS="0" useIPv6="1" path="\\server\ip6l-printer" deleteAll="0" lprQueue="MyLPRQ" snmpCommunity="ip6lcommunity" protocol="PROTOCOL_LPR_TYPE" portNumber="515" doubleSpool="1" snmpEnabled="1" snmpDevIndex="2"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="Delete All" status="Delete All" image="3" changed="2022-07-03 19:53:20" uid="{7E62F556-3602-450C-8B1B-404EB8F8A965}">
+		<Properties ipAddress="0.0.0.0" action="D" location="" localName="" comment="" default="0" skipLocal="0" useDNS="0" useIPv6="0" path="" deleteAll="1"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="old.printer.example.com" status="old.printer.example.com" image="3" changed="2022-07-03 19:53:40" uid="{4DE9AA9B-0E4D-4A34-BAE8-EB44F9CA365C}">
+		<Properties ipAddress="old.printer.example.com" action="D" location="" localName="" comment="" default="0" skipLocal="0" useDNS="1" useIPv6="0" path="" deleteAll="0"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="8.8.8.8" status="8.8.8.8" image="3" changed="2022-07-03 19:54:01" uid="{55E05B65-09DB-4C9A-8B7D-0672A0B49306}">
+		<Properties ipAddress="8.8.8.8" action="D" location="" localName="" comment="" default="0" skipLocal="0" useDNS="0" useIPv6="0" path="" deleteAll="0" lprQueue="" snmpCommunity="public" protocol="PROTOCOL_RAWTCP_TYPE" portNumber="9100" doubleSpool="0" snmpEnabled="0" snmpDevIndex="1"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="fe80::385e:d888:28c1:7f4d" status="fe80::385e:d888:28c1:7f4d" image="3" changed="2022-07-03 19:54:24" uid="{1BA413E2-8BA0-4EF1-B99E-BB28053EF29D}">
+		<Properties ipAddress="fe80::385e:d888:28c1:7f4d" action="D" location="" localName="" comment="" default="0" skipLocal="0" useDNS="0" useIPv6="1" path="" deleteAll="0"/>
+	</PortPrinter>
+	<PortPrinter clsid="{C3A739D2-4A44-401e-9F9D-88E5E77DFB3E}" name="fe80::385e:d888:28c1:7f4b" status="fe80::385e:d888:28c1:7f4b" image="1" changed="2022-07-03 19:55:21" uid="{0359069F-82A5-412F-BAF2-637C104FA1D0}">
+		<Properties ipAddress="fe80::385e:d888:28c1:7f4b" action="R" location="IP6LR Location" localName="IP6LRLocalName" comment="IP6LR Comment" default="0" skipLocal="0" useDNS="0" useIPv6="1" path="\\server\ip6lr-printer" deleteAll="0" lprQueue="MyLPRQ" snmpCommunity="ip6lcommunity" protocol="PROTOCOL_LPR_TYPE" portNumber="515" doubleSpool="1" snmpEnabled="1" snmpDevIndex="2"/>
+	</PortPrinter>
+	<LocalPrinter clsid="{F08996D5-568B-45f5-BB7A-D3FB1E370B0A}" name="local-delete" status="" image="3" changed="2022-07-03 19:55:40" uid="{E87E567B-9CCB-4CC0-9312-F5BD53C3B17A}">
+		<Properties action="D" name="local-delete" port="" path="" default="0" deleteAll="0" location="" comment=""/>
+	</LocalPrinter>
+	<LocalPrinter clsid="{F08996D5-568B-45f5-BB7A-D3FB1E370B0A}" name="LPTPrinter" status="LPT Location" image="1" changed="2022-07-03 19:57:02" uid="{F685A06B-662C-4510-96C7-C34FCB2FEEC3}">
+		<Properties action="R" name="LPTPrinter" port="LPT2:" path="\\server\lpt-printer" default="0" deleteAll="0" location="LPT Location" comment="LPT Comment"/>
+	</LocalPrinter>
+</Printers>
