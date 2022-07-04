@@ -1669,7 +1669,7 @@ Describe 'Internal functions' {
         }
 
         Describe 'UNIT: Serialize-GPPItem' {
-            Context 'Groups-UserOnly-Set-<GPPSectionID>' -Foreach @(
+            Context 'Groups-UserOnly-Set-<GPPSectionID>' -ForEach @(
                 @{
                     GPPSectionID    = 1
                     SectionDisabled = 0
@@ -1707,7 +1707,7 @@ Describe 'Internal functions' {
                 }
 
                 Context 'GPPItemUser' {
-                    # Serialize-GPPItemGroup
+                    # Serialize-GPPItemUser
 
                     Context 'Disabled-User' {
                         BeforeAll {
@@ -2025,7 +2025,7 @@ Describe 'Internal functions' {
                     Context 'Disabled-User' {
                         BeforeAll {
                             $Item = ($GPPSection.Members | Where-Object -FilterScript { $_.uid -eq '868E37FD-3A7C-4D17-BF77-2F9A1663B3FD' }).Properties
-                            [xml]$XMLDocument = Serialize-GPPItem -InputObject $Item -RootElementName 'Properties' -SpecialSerializationTypeNames 'GPPItemUserMember'
+                            [xml]$XMLDocument = Serialize-GPPItem -InputObject $Item -RootElementName 'Properties'
                         }
 
                         Context 'Structure' {
@@ -2039,35 +2039,48 @@ Describe 'Internal functions' {
                                 $XMLDocument.Properties | Should -Not -BeNullOrEmpty
                             }
                             It 'XML Properties element has correct number of properties' {
-                                ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                                ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 10
                             }
                         }
 
                         Context 'Content' {
-                            It 'Group name is correct' {
-                                $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup1'
-                            }
-                            It 'Group SID is absent' {
-                                $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
-                            }
-                            It 'Action is correct' {
+                            It 'Action is Update' {
                                 $XMLDocument.Properties.action | Should -BeExactly 'U'
                             }
                             It 'Description is correct' {
-                                $XMLDocument.Properties.description | Should -BeExactly ''
+                                $XMLDocument.Properties.description | Should -BeExactly 'My Description'
                             }
-                            It 'New group name is correct' {
-                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            It 'User name is correct' {
+                                $XMLDocument.Properties.userName | Should -BeExactly 'Disabled-User'
                             }
-                            It 'deleteAllGroups set to 0' {
-                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                            It 'User''s new name is correct' {
+                                $XMLDocument.Properties.newName | Should -BeExactly 'New name'
                             }
-                            It 'deleteAllUsers set to 0' {
-                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                            It 'User has a correct full name' {
+                                $XMLDocument.Properties.fullName | Should -BeExactly 'Full Name'
                             }
-                            It 'removeAccounts set to 0' {
-                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            It 'User must not have a password' {
+                                $XMLDocument.Properties.cpassword | Should -BeNullOrEmpty
                             }
+                            It 'User must change password at next logon' {
+                                $XMLDocument.Properties.changeLogon | Should -BeExactly '1'
+                            }
+                            It 'User can change password' {
+                                $XMLDocument.Properties.noChange | Should -BeExactly '0'
+                            }
+                            It 'User''s pasword expires' {
+                                $XMLDocument.Properties.neverExpires | Should -BeExactly '0'
+                            }
+                            It 'User is disabled' {
+                                $XMLDocument.Properties.acctDisabled | Should -BeExactly '1'
+                            }
+                            It 'User is not built-in' {
+                                $XMLDocument.Properties.subAuthority | Should -BeNullOrEmpty
+                            }
+                            It 'User GPP item does not expire' {
+                                $XMLDocument.Properties.expires | Should -BeExactly ''
+                            }
+
                         }
                     }
 
