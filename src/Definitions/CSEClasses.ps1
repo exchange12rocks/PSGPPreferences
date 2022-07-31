@@ -38,7 +38,7 @@ class GPOExtensionNamesAttribute {
 
         $sb = [System.Text.StringBuilder]::new()
         foreach ($Tool in $SortedTools) {
-            [void]$sb.Append($Tool.ToString('B'))
+            [void]$sb.Append($Tool.ToString('B').ToUpper())
         }
         $SortedToolsString = $sb.ToString()
 
@@ -47,11 +47,11 @@ class GPOExtensionNamesAttribute {
         $sb = [System.Text.StringBuilder]::new()
         foreach ($CSE in $SortedCSE) {
             $CurrentCSESet = $this.Members | Where-Object -FilterScript { $_.CSE -eq $CSE }
-            $CurrentCSEString = $CSE.ToString('B')
+            $CurrentCSEString = $CSE.ToString('B').ToUpper()
             $SortedCSETools = $CurrentCSESet.Tool | Sort-Object
             $sb2 = [System.Text.StringBuilder]::new()
             foreach ($Tool in $SortedCSETools) {
-                [void]$sb2.Append($Tool.ToString('B'))
+                [void]$sb2.Append($Tool.ToString('B').ToUpper())
             }
             $SortedCSEToolsString = $sb2.ToString()
             [void]$sb.Append(('[{0}{1}]' -f $CurrentCSEString, $SortedCSEToolsString))
