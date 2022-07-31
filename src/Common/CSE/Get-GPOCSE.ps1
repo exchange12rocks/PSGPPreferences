@@ -7,7 +7,7 @@ function Get-GPOCSE {
     $GPO = Get-GPOObject -Id $Id
     $AttributeString = $GPO.gPCMachineExtensionNames[0]
 
-    $ListsRegExFilter = '\[\{00000000-0000-0000-0000-000000000000\}(?<Tools>(?:\{[0-9A-f]{8}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{12}\})*)\](?<CseSets>(?:\[(?:\{[0-9A-f]{8}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{12}\})(?:\{[0-9A-f]{8}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{12}\})*\])*)'
+    $ListsRegExFilter = '(\[\{00000000-0000-0000-0000-000000000000\}(?<Tools>(?:\{[0-9A-f]{8}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{12}\})*)\])*(?<CseSets>(?:\[(?:\{[0-9A-f]{8}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{12}\})(?:\{[0-9A-f]{8}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{4}-[0-9A-f]{12}\})*\])*)'
     $ListsRegEx = [regex]::new($ListsRegExFilter)
     $ListMatches = $ListsRegEx.Matches($AttributeString)
 
