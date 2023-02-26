@@ -15,7 +15,28 @@ enum GPPItemActionDisplay {
 }
 
 enum GPPType {
+    # https://web.archive.org/web/20230225231706/https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gppref/12512ed6-0632-4e90-a112-d3d2cd41df6c
+    Applications
+    DataSources
+    Devices
+    Drives
+    EnvironmentVariables
+    Files
+    FolderOptions
+    Folders
+    IniFiles
+    InternetSettings
     Groups
+    NetworkOptions
+    NetworkShareSettings
+    PowerOptions
+    Printers
+    Regional
+    RegistrySettings
+    ScheduledTasks
+    NTServices
+    Shortcuts
+    StartMenuTaskbar
 }
 
 enum GPPContext {

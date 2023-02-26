@@ -10,9 +10,9 @@ function Update-GPOCSE {
     $NotContains = $false
 
     $EnabledCSEs = Get-GPOCSE -Id $Id
-    $CurrentCSESetDefinition = Get-CseSetByType -Type $Type
+    $CurrentCSESet = [GPPCSE]::GetCseSetByType($Type)
     if ($EnabledCSEs) {
-        if ($EnabledCSEs.CSE -notcontains $CurrentCSESetDefinition.CSE) {
+        if ($EnabledCSEs.CSE -notcontains $CurrentCSESet.CSE) {
             $NotContains = $true
         }
     }
@@ -22,13 +22,12 @@ function Update-GPOCSE {
 
     $CSEAttribute = $null
     if ($NotContains -and -not $Remove) {
-        $CurrentCSESet = [GpoCseSet]::new($CurrentCSESetDefinition.CSE, $CurrentCSESetDefinition.Tool)
         $CSEAttribute = [GPOExtensionNamesAttribute]::new($CurrentCSESet)
         [void]$CSEAttribute.Members.Add($EnabledCSEs)
     }
     elseif (-not $NotContains -and $Remove) {
         $CSEAttribute = [GPOExtensionNamesAttribute]::new($EnabledCSEs)
-        $MemberToRemove = $CSEAttribute.Members | Where-Object -FilterScript {$_.CSE -eq $CurrentCSESetDefinition.CSE}
+        $MemberToRemove = $CSEAttribute.Members | Where-Object -FilterScript {$_.CSE -eq $CurrentCSESet.CSE}
         [void]$CSEAttribute.Members.Remove($MemberToRemove)
     }
 
