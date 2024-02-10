@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Groups clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}">
+    <User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="Administrator (built-in)" image="2" userContext="0" removePolicy="0" changed="2023-12-16 16:53:16" uid="{7EB2AD49-22B6-4EAD-944C-9D69D6B479EB}">
+        <Properties action="U" newName="qwertyu" fullName="" description="" cpassword="" changeLogon="0" noChange="0" neverExpires="0" acctDisabled="0" subAuthority="RID_ADMIN" userName="Administrator (built-in)"/>
+        <Filters>
+            <FilterBattery bool="AND" not="0"/>
+        </Filters>
+    </User>
+</Groups>
