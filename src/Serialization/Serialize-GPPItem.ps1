@@ -59,6 +59,10 @@ function Serialize-GPPItem {
             {$_ -is [guid]} {
                 $_.ToString('B') # https://docs.microsoft.com/en-us/dotnet/api/system.guid.tostring?view=net-5.0#System_Guid_ToString_System_String: B - 32 digits separated by hyphens, enclosed in braces
             }
+            {$_ -is [System.Xml.XmlElement]} {
+                $XmlElementToInsert = $XmlDocument.ImportNode($_, $true)
+                [void]$RootElement.AppendChild($XmlElementToInsert)
+            }
             Default {
                 if ($null -ne $_ -and $_.GetType().FullName -notin $SpecialSerializationTypeNames) {
                     $_

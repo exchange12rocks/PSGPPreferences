@@ -8,6 +8,7 @@ function Deserialize-GPPSectionGroups {
 
     foreach ($ChildNode in $InputObject.ChildNodes) {
         $GPPItemPropertiesElement = $ChildNode.Properties
+        $GPPItemFiltersElement = $ChildNode.Filters
         $GPPItemPropertiesElementPropertyDefinitions = (Get-Member -InputObject $GPPItemPropertiesElement | Where-Object { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Name
         foreach ($PropertyDefinition in $GPPItemPropertiesElementPropertyDefinitions) {
             if ($GPPItemPropertiesElement.$PropertyDefinition -eq '') {
@@ -54,7 +55,7 @@ function Deserialize-GPPSectionGroups {
 
                 $GPPItemPropertiesGroup = [GPPItemPropertiesGroup]::new($GPPItemPropertiesElement.action, $GPPItemPropertiesElement.groupName, $GPPItemPropertiesElement.groupSid, $GPPItemPropertiesElement.newName, $GPPItemPropertiesElement.description, $Members, $DeleteAllUsers, $DeleteAllGroups)
 
-                $GroupsMembers.Add([GPPItemGroup]::new($GPPItemPropertiesGroup, [guid]$ChildNode.uid, $Disabled, $ChildNode.name))
+                $GroupsMembers.Add([GPPItemGroup]::new($GPPItemPropertiesGroup, [guid]$ChildNode.uid, $Disabled, $ChildNode.name, $GPPItemFiltersElement))
             }
             'User' {
                 $UserMustChangePassword = if ($GPPItemPropertiesElement.changeLogon -eq 1) {
@@ -100,7 +101,7 @@ function Deserialize-GPPSectionGroups {
                     [GPPItemPropertiesUser]::new($GPPItemPropertiesElement.action, $BuiltInUser, $GPPItemPropertiesElement.userName, $GPPItemPropertiesElement.newName, $GPPItemPropertiesElement.fullName, $GPPItemPropertiesElement.description, $UserMayNotChangePassword, $PasswordNeverExpires, $AccountDisabled, $GPPItemPropertiesElement.expires)
                 }
 
-                $GroupsMembers.Add([GPPItemUser]::new($GPPItemPropertiesUser, [guid]$ChildNode.uid, $Disabled, $ChildNode.name))
+                $GroupsMembers.Add([GPPItemUser]::new($GPPItemPropertiesUser, [guid]$ChildNode.uid, $Disabled, $ChildNode.name, $GPPItemFiltersElement))
             }
         }
     }
