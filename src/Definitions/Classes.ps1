@@ -80,7 +80,8 @@ class GPPItem : PSGPPreferencesItem {
     [bool]$bypassErrors = $true # not yet implemented (Stop processing items in this extension if an error occures (Inverted))
     [bool]$disabled
     [GPPItemProperties]$Properties
-    [GPPItemFilter[]]$Filters
+    #[GPPItemFilter[]]$Filters
+    [System.Xml.XmlElement]$Filters
 }
 #endregion
 
@@ -456,6 +457,14 @@ class GPPItemGroup : GPPItemGroupsSection {
         $this.uid = $UID
         $this.disabled = $Disabled
     }
+
+    GPPItemGroup([GPPItemPropertiesGroup] $Properties, [guid] $UID, [bool] $Disabled, [string] $Name, [System.Xml.XmlElement] $Filters) {
+        $this.Properties = $Properties
+        $this.name = $Name
+        $this.uid = $UID
+        $this.disabled = $Disabled
+        $this.Filters = $Filters
+    }
 }
 
 class GPPItemPropertiesUser : GPPItemProperties {
@@ -591,6 +600,14 @@ class GPPItemUser : GPPItemGroupsSection {
         $this.name = $Name
         $this.uid = $UID
         $this.disabled = $Disabled
+    }
+
+    GPPItemUser([GPPItemPropertiesUser] $Properties, [guid] $UID, [bool] $Disabled, [string] $Name, [System.Xml.XmlElement] $Filters) {
+        $this.Properties = $Properties
+        $this.name = $Name
+        $this.uid = $UID
+        $this.disabled = $Disabled
+        $this.Filters = $Filters
     }
 }
 

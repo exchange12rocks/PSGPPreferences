@@ -1,10 +1,10 @@
 BeforeDiscovery {
     $ScriptDirectoryPath = $PSScriptRoot
-    $DataSourcePath = Join-Path -Path $ScriptDirectoryPath -ChildPath 'Data\Groups'
-    $Set1Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-UserOnly-Set-1.xml'
-    [xml]$Set1Data = Get-Content -Path $Set1Path
-    $Set2Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-UserOnly-Set-2.xml'
-    [xml]$Set2Data = Get-Content -Path $Set2Path
+    $global:DataSourcePath = Join-Path -Path $ScriptDirectoryPath -ChildPath 'Data\Groups'
+    $global:Set1Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-UserOnly-Set-1.xml'
+    [xml]$global:Set1Data = Get-Content -Path $Set1Path
+    $global:Set2Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-UserOnly-Set-2.xml'
+    [xml]$global:Set2Data = Get-Content -Path $Set2Path
     $ModuleRootPath = Join-Path -Path $ScriptDirectoryPath -ChildPath ..\src\
     Import-Module -Name (Join-Path -Path $ModuleRootPath -ChildPath 'PSGPPreferences.psd1') -Force
     . (Join-Path -Path $ModuleRootPath -ChildPath 'Definitions\Classes.ps1')
@@ -77,7 +77,7 @@ Describe 'Internal functions' {
                         $GPPSection | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP section is of a correct type' {
-                        $GPPSection | Should -BeOfType [GPPSectionGroups]
+                        $GPPSection | Should -BeOfType ([GPPSectionGroups])
                     }
                     It 'GPP section is in a correct state' {
                         $GPPSection.disabled | Should -Be $Disabled
@@ -96,7 +96,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Disabled-User'
@@ -160,7 +160,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'NoExpire'
@@ -224,7 +224,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'NoExpireD'
@@ -288,7 +288,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Guest (built-in)'
@@ -352,7 +352,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrator (built-in)'
@@ -416,7 +416,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrator (built-in)'
@@ -480,7 +480,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'User 1'
@@ -544,7 +544,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'User 1 Delete'
@@ -612,7 +612,7 @@ Describe 'Internal functions' {
                         $GPPSection | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP section is of a correct type' {
-                        $GPPSection | Should -BeOfType [GPPSectionGroups]
+                        $GPPSection | Should -BeOfType ([GPPSectionGroups])
                     }
                     It 'GPP section is enabled' {
                         $GPPSection.disabled | Should -BeFalse
@@ -631,7 +631,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Disabled-User'
@@ -695,7 +695,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'NoExpire'
@@ -759,7 +759,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'NoExpireD'
@@ -823,7 +823,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Guest (built-in)'
@@ -887,7 +887,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrator (built-in)'
@@ -951,7 +951,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrator (built-in)'
@@ -1015,7 +1015,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'User 1'
@@ -1079,7 +1079,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'User 1 Delete'
@@ -1144,7 +1144,7 @@ Describe 'Internal functions' {
                         $GPPSection | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP section is of a correct type' {
-                        $GPPSection | Should -BeOfType [GPPSectionGroups]
+                        $GPPSection | Should -BeOfType ([GPPSectionGroups])
                     }
                     It 'GPP section is disabled' {
                         $GPPSection.disabled | Should -BeTrue
@@ -1163,7 +1163,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Disabled-User'
@@ -1227,7 +1227,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'NoExpire'
@@ -1291,7 +1291,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'NoExpireD'
@@ -1355,7 +1355,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Guest (built-in)'
@@ -1419,7 +1419,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrator (built-in)'
@@ -1483,7 +1483,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrator (built-in)'
@@ -1547,7 +1547,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'User 1'
@@ -1611,7 +1611,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemUser]
+                        $GPPItem | Should -BeOfType ([GPPItemUser])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'User 1 Delete'
@@ -2020,7 +2020,7 @@ Describe 'Internal functions' {
                     # $Item In $InputObject.Members
                     # $InputObject = $Item
                     # $InputObject = $InputObject.Properties
-                    # Serialize-GPPItem -InputObject $InputObject -RootElementName 'Properties'
+                    # Serialize-GPPItem -InputObject $InputObject -RootElementName 'Properties' -SpecialSerializationTypeNames 'GPPItemUserMember'
 
                     Context 'Disabled-User' {
                         BeforeAll {
@@ -2039,34 +2039,46 @@ Describe 'Internal functions' {
                                 $XMLDocument.Properties | Should -Not -BeNullOrEmpty
                             }
                             It 'XML Properties element has correct number of properties' {
-                                ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 7
+                                ($XMLDocument.Properties | Get-Member | Where-Object -FilterScript { $_.MemberType -eq [System.Management.Automation.PSMemberTypes]::Property }).Count | Should -Be 10
                             }
                         }
 
                         Context 'Content' {
-                            It 'Group name is correct' {
-                                $XMLDocument.Properties.groupName | Should -BeExactly 'EXAMPLE\TestGroup1'
-                            }
-                            It 'Group SID is absent' {
-                                $XMLDocument.Properties.groupSid | Should -BeNullOrEmpty
-                            }
-                            It 'Action is correct' {
+                            It 'GPP item action is set to Update' {
                                 $XMLDocument.Properties.action | Should -BeExactly 'U'
                             }
-                            It 'Description is correct' {
-                                $XMLDocument.Properties.description | Should -BeExactly ''
+                            It 'GPP item has a correct description' {
+                                $XMLDocument.Properties.description | Should -BeExactly 'My Description'
                             }
-                            It 'New group name is correct' {
-                                $XMLDocument.Properties.newName | Should -BeExactly ''
+                            It 'User has a correct name' {
+                                $XMLDocument.Properties.userName | Should -BeExactly 'Disabled-User'
                             }
-                            It 'deleteAllGroups set to 0' {
-                                $XMLDocument.Properties.deleteAllGroups | Should -BeExactly '0'
+                            It 'User to be renamed correctly' {
+                                $XMLDocument.Properties.newName | Should -BeExactly 'New name'
                             }
-                            It 'deleteAllUsers set to 0' {
-                                $XMLDocument.Properties.deleteAllUsers | Should -BeExactly '0'
+                            It 'User has a correct full name' {
+                                $XMLDocument.Properties.fullName | Should -BeExactly 'Full Name'
                             }
-                            It 'removeAccounts set to 0' {
-                                $XMLDocument.Properties.removeAccounts | Should -BeExactly '0'
+                            It 'User must not have a password' {
+                                $XMLDocument.Properties.cpassword | Should -BeNullOrEmpty
+                            }
+                            It 'User must change password at next logon' {
+                                $XMLDocument.Properties.changeLogon | Should -BeTrue
+                            }
+                            It 'User can change password' {
+                                $XMLDocument.Properties.noChange | Should -BeExactly '0'
+                            }
+                            It 'User''s pasword expires' {
+                                $XMLDocument.Properties.neverExpires | Should -BeExactly '0'
+                            }
+                            It 'User is disabled' {
+                                $XMLDocument.Properties.acctDisabled | Should -BeTrue
+                            }
+                            It 'User is not built-in' {
+                                $XMLDocument.Properties.subAuthority | Should -BeNullOrEmpty
+                            }
+                            It 'User GPP item does not expire' {
+                                $XMLDocument.Properties.expires | Should -BeNullOrEmpty
                             }
                         }
                     }

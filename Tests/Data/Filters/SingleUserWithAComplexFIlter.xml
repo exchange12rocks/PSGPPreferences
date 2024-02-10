@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Groups clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}">
+    <User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="Administrator (built-in)" image="2" changed="2023-12-16 17:37:02" uid="{FDDC15B1-FDCD-4D54-BE1C-76F1204BDB7C}" userContext="0" removePolicy="0">
+        <Properties action="U" newName="qwertyu" fullName="" description="" cpassword="" changeLogon="0" noChange="0" neverExpires="0" acctDisabled="0" subAuthority="RID_ADMIN" userName="Administrator (built-in)"/>
+        <Filters>
+            <FilterBattery bool="AND" not="0"/>
+            <FilterCollection bool="AND" not="0">
+                <FilterOrgUnit bool="AND" not="0" name="OU=Test,DC=example,DC=com" userContext="0" directMember="0"/>
+                <FilterWmi bool="AND" not="0" query="Some Text = *" nameSpace="Root\cimv2" property="" variableName=""/>
+            </FilterCollection>
+            <FilterDisk bool="AND" not="0" freeSpace="80" drive="V:"/>
+        </Filters>
+    </User>
+</Groups>
