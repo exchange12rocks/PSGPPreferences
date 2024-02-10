@@ -1,10 +1,10 @@
 BeforeDiscovery {
     $ScriptDirectoryPath = $PSScriptRoot
-    $DataSourcePath = Join-Path -Path $ScriptDirectoryPath -ChildPath 'Data\Groups'
-    $Set1Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupOnly-Set-1.xml'
-    [xml]$Set1Data = Get-Content -Path $Set1Path
-    $Set2Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupOnly-Set-2.xml'
-    [xml]$Set2Data = Get-Content -Path $Set2Path
+    $global:DataSourcePath = Join-Path -Path $ScriptDirectoryPath -ChildPath 'Data\Groups'
+    $global:Set1Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupOnly-Set-1.xml'
+    [xml]$global:Set1Data = Get-Content -Path $Set1Path
+    $global:Set2Path = Join-Path -Path $DataSourcePath -ChildPath 'Groups-GroupOnly-Set-2.xml'
+    [xml]$global:Set2Data = Get-Content -Path $Set2Path
     $ModuleRootPath = Join-Path -Path $ScriptDirectoryPath -ChildPath ..\src\
     Import-Module -Name (Join-Path -Path $ModuleRootPath -ChildPath 'PSGPPreferences.psd1') -Force
     . (Join-Path -Path $ModuleRootPath -ChildPath 'Definitions\Classes.ps1')
@@ -77,7 +77,7 @@ Describe 'Internal functions' {
                         $GPPSection | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP section is of a correct type' {
-                        $GPPSection | Should -BeOfType [GPPSectionGroups]
+                        $GPPSection | Should -BeOfType ([GPPSectionGroups])
                     }
                     It 'GPP section is in a correct state' {
                         $GPPSection.disabled | Should -Be $Disabled
@@ -96,7 +96,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup1'
@@ -148,7 +148,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrators (built-in)'
@@ -200,7 +200,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup3'
@@ -252,7 +252,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup4'
@@ -304,7 +304,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup5'
@@ -356,7 +356,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'LocalGroup1'
@@ -408,7 +408,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'LocalGroup3'
@@ -459,7 +459,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
@@ -468,7 +468,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -481,7 +481,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
@@ -490,7 +490,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member has an SID' {
                             $Member.sid | Should -Not -BeNullOrEmpty
@@ -506,7 +506,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
@@ -515,7 +515,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'REMOVE'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -527,7 +527,7 @@ Describe 'Internal functions' {
                             }
 
                             It 'Member is of a correct type' {
-                                $Member | Should -BeOfType [GPPItemGroupMember]
+                                $Member | Should -BeOfType ([GPPItemGroupMember])
                             }
                             It 'Member''s name has a correct case' {
                                 $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
@@ -536,7 +536,7 @@ Describe 'Internal functions' {
                                 $Member.action | Should -Be 'REMOVE'
                             }
                             It 'The action is of a correct type' {
-                                $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                                $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                             }
                             It 'Member has an SID' {
                                 $Member.sid | Should -Not -BeNullOrEmpty
@@ -557,7 +557,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Backup Operators (built-in)'
@@ -608,7 +608,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
@@ -617,7 +617,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -630,7 +630,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
@@ -639,7 +639,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member has an SID' {
                             $Member.sid | Should -Not -BeNullOrEmpty
@@ -655,7 +655,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
@@ -664,7 +664,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'REMOVE'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -676,7 +676,7 @@ Describe 'Internal functions' {
                             }
 
                             It 'Member is of a correct type' {
-                                $Member | Should -BeOfType [GPPItemGroupMember]
+                                $Member | Should -BeOfType ([GPPItemGroupMember])
                             }
                             It 'Member''s name has a correct case' {
                                 $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
@@ -685,7 +685,7 @@ Describe 'Internal functions' {
                                 $Member.action | Should -Be 'REMOVE'
                             }
                             It 'The action is of a correct type' {
-                                $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                                $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                             }
                             It 'Member has an SID' {
                                 $Member.sid | Should -Not -BeNullOrEmpty
@@ -714,7 +714,7 @@ Describe 'Internal functions' {
                         $GPPSection | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP section is of a correct type' {
-                        $GPPSection | Should -BeOfType [GPPSectionGroups]
+                        $GPPSection | Should -BeOfType ([GPPSectionGroups])
                     }
                     It 'GPP section is enabled' {
                         $GPPSection.disabled | Should -BeFalse
@@ -733,7 +733,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup1'
@@ -785,7 +785,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrators (built-in)'
@@ -837,7 +837,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup3'
@@ -889,7 +889,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup4'
@@ -941,7 +941,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup5'
@@ -993,7 +993,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'LocalGroup1'
@@ -1045,7 +1045,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'LocalGroup3'
@@ -1096,7 +1096,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
@@ -1105,7 +1105,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -1118,7 +1118,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
@@ -1127,7 +1127,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member has an SID' {
                             $Member.sid | Should -Not -BeNullOrEmpty
@@ -1143,7 +1143,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
@@ -1152,7 +1152,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'REMOVE'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -1164,7 +1164,7 @@ Describe 'Internal functions' {
                             }
 
                             It 'Member is of a correct type' {
-                                $Member | Should -BeOfType [GPPItemGroupMember]
+                                $Member | Should -BeOfType ([GPPItemGroupMember])
                             }
                             It 'Member''s name has a correct case' {
                                 $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
@@ -1173,7 +1173,7 @@ Describe 'Internal functions' {
                                 $Member.action | Should -Be 'REMOVE'
                             }
                             It 'The action is of a correct type' {
-                                $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                                $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                             }
                             It 'Member has an SID' {
                                 $Member.sid | Should -Not -BeNullOrEmpty
@@ -1194,7 +1194,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Backup Operators (built-in)'
@@ -1245,7 +1245,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
@@ -1254,7 +1254,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -1267,7 +1267,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
@@ -1276,7 +1276,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member has an SID' {
                             $Member.sid | Should -Not -BeNullOrEmpty
@@ -1292,7 +1292,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
@@ -1301,7 +1301,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'REMOVE'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -1313,7 +1313,7 @@ Describe 'Internal functions' {
                             }
 
                             It 'Member is of a correct type' {
-                                $Member | Should -BeOfType [GPPItemGroupMember]
+                                $Member | Should -BeOfType ([GPPItemGroupMember])
                             }
                             It 'Member''s name has a correct case' {
                                 $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
@@ -1322,7 +1322,7 @@ Describe 'Internal functions' {
                                 $Member.action | Should -Be 'REMOVE'
                             }
                             It 'The action is of a correct type' {
-                                $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                                $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                             }
                             It 'Member has an SID' {
                                 $Member.sid | Should -Not -BeNullOrEmpty
@@ -1344,7 +1344,7 @@ Describe 'Internal functions' {
                         $GPPSection | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP section is of a correct type' {
-                        $GPPSection | Should -BeOfType [GPPSectionGroups]
+                        $GPPSection | Should -BeOfType ([GPPSectionGroups])
                     }
                     It 'GPP section is disabled' {
                         $GPPSection.disabled | Should -BeTrue
@@ -1363,7 +1363,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup1'
@@ -1415,7 +1415,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Administrators (built-in)'
@@ -1467,7 +1467,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup3'
@@ -1519,7 +1519,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup4'
@@ -1571,7 +1571,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'EXAMPLE\TestGroup5'
@@ -1623,7 +1623,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'LocalGroup1'
@@ -1675,7 +1675,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'LocalGroup3'
@@ -1726,7 +1726,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
@@ -1735,7 +1735,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -1748,7 +1748,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
@@ -1757,7 +1757,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member has an SID' {
                             $Member.sid | Should -Not -BeNullOrEmpty
@@ -1773,7 +1773,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
@@ -1782,7 +1782,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'REMOVE'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -1794,7 +1794,7 @@ Describe 'Internal functions' {
                             }
 
                             It 'Member is of a correct type' {
-                                $Member | Should -BeOfType [GPPItemGroupMember]
+                                $Member | Should -BeOfType ([GPPItemGroupMember])
                             }
                             It 'Member''s name has a correct case' {
                                 $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
@@ -1803,7 +1803,7 @@ Describe 'Internal functions' {
                                 $Member.action | Should -Be 'REMOVE'
                             }
                             It 'The action is of a correct type' {
-                                $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                                $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                             }
                             It 'Member has an SID' {
                                 $Member.sid | Should -Not -BeNullOrEmpty
@@ -1824,7 +1824,7 @@ Describe 'Internal functions' {
                         $GPPItem | Should -Not -BeNullOrEmpty
                     }
                     It 'GPP item is of a correct type' {
-                        $GPPItem | Should -BeOfType [GPPItemGroup]
+                        $GPPItem | Should -BeOfType ([GPPItemGroup])
                     }
                     It 'GPP item has a correct name' {
                         $GPPItem.name | Should -BeExactly 'Backup Operators (built-in)'
@@ -1875,7 +1875,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\Administrator'
@@ -1884,7 +1884,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -1897,7 +1897,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST1'
@@ -1906,7 +1906,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'ADD'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member has an SID' {
                             $Member.sid | Should -Not -BeNullOrEmpty
@@ -1922,7 +1922,7 @@ Describe 'Internal functions' {
                         }
 
                         It 'Member is of a correct type' {
-                            $Member | Should -BeOfType [GPPItemGroupMember]
+                            $Member | Should -BeOfType ([GPPItemGroupMember])
                         }
                         It 'Member''s name has a correct case' {
                             $Member.name | Should -BeExactly 'EXAMPLE\TEST2'
@@ -1931,7 +1931,7 @@ Describe 'Internal functions' {
                             $Member.action | Should -Be 'REMOVE'
                         }
                         It 'The action is of a correct type' {
-                            $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                            $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                         }
                         It 'Member does not have an SID' {
                             $Member.sid | Should -BeNullOrEmpty
@@ -1943,7 +1943,7 @@ Describe 'Internal functions' {
                             }
 
                             It 'Member is of a correct type' {
-                                $Member | Should -BeOfType [GPPItemGroupMember]
+                                $Member | Should -BeOfType ([GPPItemGroupMember])
                             }
                             It 'Member''s name has a correct case' {
                                 $Member.name | Should -BeExactly 'EXAMPLE\TEST3'
@@ -1952,7 +1952,7 @@ Describe 'Internal functions' {
                                 $Member.action | Should -Be 'REMOVE'
                             }
                             It 'The action is of a correct type' {
-                                $Member.action | Should -BeOfType [GPPItemGroupMemberAction]
+                                $Member.action | Should -BeOfType ([GPPItemGroupMemberAction])
                             }
                             It 'Member has an SID' {
                                 $Member.sid | Should -Not -BeNullOrEmpty
@@ -7647,14 +7647,14 @@ Describe 'Internal functions' {
                             $TypedResult | Should -Not -BeNullOrEmpty
                         }
                         It 'Object has correct type' {
-                            $TypedResult | Should -BeOfType [System.Collections.Hashtable]
+                            $TypedResult | Should -BeOfType ([System.Collections.Hashtable])
                         }
                     }
 
                     Context 'Attributes' {
                         Context 'Type' {
                             It 'Type has correct type' {
-                                $TypedResult.Type | Should -BeOfType [GPPType]
+                                $TypedResult.Type | Should -BeOfType ([GPPType])
                             }
                             It 'Type has correct value' {
                                 $TypedResult.Type | Should -Be ([GPPType]::Groups)
